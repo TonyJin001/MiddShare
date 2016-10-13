@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="fbf8da429efd5ad21e02e3e5ecaa1efc4167878d">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_bc5bdfc98c6c2bd3fb48ff51334319aef8387f7c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.1/support-annotations-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-24.2.1_82d8d8b1ba7c71570b58240aa35cfc44f8950846/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_cfe79a40d4adbc304a112bd5e070e1012d6cb8df/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="935a969265b2a166b2d20415423f5f6e90fe16e0">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_45e0453ee46cd86e4630debe1aa3cea50e1137a0/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="7521486d9bfd2cd9e756e0cf75ed7d97f2ce2d3b">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-24.2.1_32b795532e5e19166685df3ee827fbd6be80e615/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-24.2.1_6d729a90a523589ac6c579f2fef77bcedb410f7f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="867dad63c33388ff8c7644b236579355036d075f">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_565dbd25cd9461237d15bc0f9fe76ab3690accba/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-24.2.1_b14b626a672f8001a423a361b25b43ac0e4f3316/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-24.2.1_ad48a3ff0f12ebcb50d71fbf772529929129bacd/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_2a034cf2fd7c9ba284a60f6d14b503d823f97e9a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="805f5d4d39eeb553281e9468bc793dc502b5dc53">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_0e4b54c33b020ce6252f833097cfa75b1c31c98c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="9c4c3bc902450c39ed54de170db4fb12aea20a35">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-24.2.1_e6fdfea9a02ecee2d4a7e7bdce60dff0f7639b75/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-24.2.1_b0b29e89b2825425174811e5c1266e0dcc169cbd/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="d5c731fc64c03dfe04d51134955b483551c35849">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-24.2.1_f0db990bb4d629e6384a6f1315a32949fc995f9a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/exploded-aar/com.android.support/design/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="e03f47f3d1017a093bb3239d4ec47c3447f40744">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-24.2.1_4e3690562f650099d26e79f24ee51b06c3e11d40/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-24.2.1_a85e0a7fc9f575113350fcbe63ebb73520cccbda/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="e7f3132168957eefc46229fc32c3bd464642b71e">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-24.2.1_d6431dee49c73bbb423d69e8dfcb94b99aa437f0/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="880f3b091bc30d429a561b6fb4fd38b78dda7254">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_60fc96c17b96460dd8b1043145452af4250279f3/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
+        <dex dex="/Users/birgittacheng/Desktop/MiddShare/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-24.2.1_1f6322ba85d6e4ca993e3af4c5406a49b2256119/classes.dex" />
+    </item>
+
+</items>
