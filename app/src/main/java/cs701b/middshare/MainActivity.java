@@ -54,8 +54,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
+                initFacebookLogin();
                 if (user != null) {
                     Log.d(TAG, "onAuthStateChanged:signed_in" + user.getUid());
+                    logIn();
                 } else {
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        initFacebookLogin();
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -127,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signInWithCredential:onComplete" + task.isSuccessful());
+                        logIn();
 
                         if (!task.isSuccessful()){
                             Log.w(TAG, "signInWIthCredential", task.getException());
@@ -159,12 +162,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /** Called when user clicks Log In Button */
-    public void logIn(View view){
+    public void logIn(){
         //does something in response to button
-        Intent intent = new Intent(this,ServiceExchange.class);
-        EditText editText = (EditText) findViewById(R.id.edit_message);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE,message);
+        Intent intent = new Intent(MainActivity.this,ServiceExchange.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 }
