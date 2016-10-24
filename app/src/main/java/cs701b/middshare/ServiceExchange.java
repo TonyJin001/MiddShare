@@ -39,7 +39,6 @@ public class ServiceExchange extends AppCompatActivity {
     private String mUserId;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
-    private ArrayList<ServiceExchangeItem> seItemList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +69,8 @@ public class ServiceExchange extends AppCompatActivity {
             });
 
             mDatabase = FirebaseDatabase.getInstance().getReference();
-//            seItemList = new ArrayList<ServiceExchangeItem>();
             final ListView seList = (ListView) findViewById(R.id.service_list);
-//            final ServiceExchangeAdapter adapter = new ServiceExchangeAdapter(this,seItemList);
-//            seList.setAdapter(adapter);
+
             FirebaseListAdapter<ServiceExchangeItem> adapter = new FirebaseListAdapter<ServiceExchangeItem>(
                     this,
                     ServiceExchangeItem.class,
@@ -103,60 +100,6 @@ public class ServiceExchange extends AppCompatActivity {
                     editPrice.setText("");
                 }
             });
-
-//            mDatabase.child("users").addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                        ServiceExchangeItem tempSeItem = snapshot.child("items").child("se").getValue(ServiceExchangeItem.class);
-//                        seItemList.add(tempSeItem);
-//                    }
-//                    seList.setAdapter(adapter);
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
-
-//            mDatabase.child("users").addChildEventListener(new ChildEventListener() {
-//                    @Override
-//                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                            ServiceExchangeItem tempSeItem = snapshot.child("items").child("se").getValue(ServiceExchangeItem.class);
-//                            seItemList.add(tempSeItem);
-//                        }
-//                        seList.setAdapter(adapter);
-//                    }
-//
-//                    @Override
-//                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//
-//                    }
-//             });
-
-
-
-
-
-
-
         }
     }
 
