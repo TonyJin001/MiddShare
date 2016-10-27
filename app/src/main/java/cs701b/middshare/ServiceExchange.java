@@ -2,6 +2,7 @@ package cs701b.middshare;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,9 +19,12 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,6 +45,7 @@ public class ServiceExchange extends AppCompatActivity {
     private String mUserId;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
+    private final String TAG = "Service_Exchange";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +60,26 @@ public class ServiceExchange extends AppCompatActivity {
             loadLoginView();
         } else {
             mUserId = mFirebaseUser.getUid();
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+            Uri photoUri = Uri.parse("");
+            String email = "";
+            String name = "";
 
             for (UserInfo profile : mFirebaseUser.getProviderData()) {
                 String uid = profile.getUid();
                 profilePictureView = (ProfilePictureView) findViewById(R.id.profile_pic);
                 profilePictureView.setProfileId(uid);
+                photoUri = profile.getPhotoUrl();
+                email = profile.getEmail();
+                name = profile.getDisplayName();
+            }
+            // Might have to change what this checks...shouldn't update the db every time
+            if (mFirebaseUser.getDisplayName() == null || mFirebaseUser.getEmail() == null || mFirebaseUser.getPhotoUrl() == null) {
+//                updateProfile(name,email, photoUri);
+            } else {
+                mDatabase.child("users").child(mUserId).child("name").setValue(mFirebaseUser.getDisplayName());
+                mDatabase.child("users").child(mUserId).child("email").setValue(mFirebaseUser.getEmail());
+                mDatabase.child("users").child(mUserId).child("photo").setValue(mFirebaseUser.getPhotoUrl().toString());
             }
 
             Button bLogOut = (Button) findViewById(R.id.logout_button);
@@ -70,7 +90,6 @@ public class ServiceExchange extends AppCompatActivity {
                 }
             });
 
-            mDatabase = FirebaseDatabase.getInstance().getReference();
             final ListView seList = (ListView) findViewById(R.id.service_list);
 
             FirebaseListAdapter<ServiceExchangeItem> adapter = new FirebaseListAdapter<ServiceExchangeItem>(
@@ -112,6 +131,33 @@ public class ServiceExchange extends AppCompatActivity {
             });
         }
     }
+
+    private void updateProfile(String name, String email, Uri uri) {
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .setPhotoUri(uri)
+                .build();
+
+        mFirebaseUser.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG,"User profile updated");
+                }
+            }
+        });
+
+        mFirebaseUser.updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG,"User email updated");
+                }
+            }
+        });
+    }
+
+
 
     private void logOut (View view) {
         mFirebaseAuth.signOut();
