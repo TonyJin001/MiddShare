@@ -29,6 +29,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.lang.System.err;
 
@@ -75,16 +77,16 @@ public class ServiceExchange extends AppCompatActivity {
                     this,
                     ServiceExchangeItem.class,
                     R.layout.list_item_service_exchange,
-                    mDatabase.child("users").child(mUserId).child("items")
+                    mDatabase.child("service_exchange_items")
             ) {
                 @Override
                 protected void populateView(View v, ServiceExchangeItem model, int position) {
 //                    ImageView userPhoto = (ImageView) v.findViewById(R.id.user_photo);
                     TextView description = (TextView) v.findViewById(R.id.description);
                     TextView price = (TextView) v.findViewById(R.id.cost);
-                    description.setText(model.description);
-                    Log.d("ServiceExchange",model.description+"@"+model.price);
-                    price.setText(R.string.currency+model.price);
+                    description.setText(model.getDescription());
+                    Log.d("ServiceExchange",model.getDescription()+"@"+model.getPrice());
+                    price.setText(model.getPrice());
                 }
             };
             seList.setAdapter(adapter);
@@ -94,8 +96,16 @@ public class ServiceExchange extends AppCompatActivity {
             final Button seSubmit = (Button) findViewById(R.id.se_submit);
             seSubmit.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v) {
-                    mDatabase.child("users").child(mUserId).child("items")
-                            .push().setValue(new ServiceExchangeItem(editDescription.getText().toString(),editPrice.getText().toString()));
+
+                    String key = mDatabase.child("items").push().getKey();
+                    ServiceExchangeItem newItem = new ServiceExchangeItem(editDescription.getText().toString(),editPrice.getText().toString());
+                    Map<String,Object> newItemValues = newItem.toMap();
+
+                    Map<String,Object> childUpdates = new HashMap<>();
+                    childUpdates.put("/service_exchange_items/" + key, newItemValues);
+                    childUpdates.put("/user-service_exchange_items/" + mUserId + "/" + key, newItemValues);
+
+                    mDatabase.updateChildren(childUpdates);
                     editDescription.setText("");
                     editPrice.setText("");
                 }
