@@ -1,7 +1,10 @@
 package cs701b.middshare;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,6 +35,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +53,7 @@ public class ServiceExchange extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private final String TAG = "Service_Exchange";
+    private Bitmap currentBitmap = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +81,22 @@ public class ServiceExchange extends AppCompatActivity {
                 email = profile.getEmail();
                 name = profile.getDisplayName();
             }
-            // Might have to change what this checks...shouldn't update the db every time
-            if (mFirebaseUser.getDisplayName() == null || mFirebaseUser.getEmail() == null || mFirebaseUser.getPhotoUrl() == null) {
-//                updateProfile(name,email, photoUri);
-            } else {
+
+            if (!mDatabase.child("users").child(mUserId).child("name").equals(mFirebaseUser.getDisplayName())) {
                 mDatabase.child("users").child(mUserId).child("name").setValue(mFirebaseUser.getDisplayName());
+                Log.d(TAG,"update name");
+            }
+            if (!mDatabase.child("users").child(mUserId).child("email").equals(mFirebaseUser.getEmail())){
                 mDatabase.child("users").child(mUserId).child("email").setValue(mFirebaseUser.getEmail());
-                mDatabase.child("users").child(mUserId).child("photo").setValue(mFirebaseUser.getPhotoUrl().toString());
+                Log.d(TAG,"update email");
+            }
+            if (!mDatabase.child("users").child(mUserId).child("photo").equals(mFirebaseUser.getPhotoUrl().toString())) {
+                if (!mFirebaseUser.getPhotoUrl().toString().equals(null)) {
+                    mDatabase.child("users").child(mUserId).child("photo").setValue(mFirebaseUser.getPhotoUrl().toString());
+                    Log.d(TAG,"update photo");
+                } else {
+                    Log.d(TAG, "photo null");
+                }
             }
 
             Button bLogOut = (Button) findViewById(R.id.logout_button);
@@ -100,12 +117,16 @@ public class ServiceExchange extends AppCompatActivity {
             ) {
                 @Override
                 protected void populateView(View v, ServiceExchangeItem model, int position) {
-//                    ImageView userPhoto = (ImageView) v.findViewById(R.id.user_photo);
+                    ImageView userPhoto = (ImageView) v.findViewById(R.id.user_photo);
                     TextView description = (TextView) v.findViewById(R.id.description);
                     TextView price = (TextView) v.findViewById(R.id.cost);
                     description.setText(model.getDescription());
-                    Log.d("ServiceExchange",model.getDescription()+"@"+model.getPrice());
+                    Log.d(TAG,model.getDescription()+"@"+model.getPrice());
                     price.setText(model.getPrice());
+                    Log.d(TAG,"Photo url:" + model.getPhotoUrl());
+                    new GetProfilePhoto().execute(model.getPhotoUrl());
+                    Log.d(TAG,"Current bitmap: " + currentBitmap);
+                    userPhoto.setImageBitmap(currentBitmap);
                 }
             };
             seList.setAdapter(adapter);
@@ -117,7 +138,8 @@ public class ServiceExchange extends AppCompatActivity {
                 public void onClick(View v) {
 
                     String key = mDatabase.child("items").push().getKey();
-                    ServiceExchangeItem newItem = new ServiceExchangeItem(editDescription.getText().toString(),editPrice.getText().toString());
+                    ServiceExchangeItem newItem = new ServiceExchangeItem(editDescription.getText().toString(),editPrice.getText().toString(),
+                            mFirebaseUser.getPhotoUrl().toString());
                     Map<String,Object> newItemValues = newItem.toMap();
 
                     Map<String,Object> childUpdates = new HashMap<>();
@@ -172,4 +194,33 @@ public class ServiceExchange extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
+
+    class GetProfilePhoto extends AsyncTask<String, Void, Bitmap> {
+
+        private Exception exception;
+
+        protected Bitmap doInBackground(String... urlStr) {
+            try {
+                Bitmap bitmap = null;
+                try {
+                    URL url = new URL(urlStr[0]);
+                    bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                } catch (NullPointerException e) {
+                    Log.e(TAG,"nullpointer when setting user image");
+                } catch (IOException e) {
+                    Log.e(TAG, "IO exception when setting user image");
+                }
+                return bitmap;
+            } catch (Exception e) {
+                this.exception = e;
+                return null;
+            }
+        }
+
+        protected void onPostExecute(Bitmap bitmap) {
+            currentBitmap = bitmap;
+        }
+    }
+
+
 }
