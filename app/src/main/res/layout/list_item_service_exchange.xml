@@ -5,30 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
-    <TextView
-        android:id="@+id/cost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="2dp"
-        android:maxLines="1"
-        android:paddingRight="4dp"
-        android:textColor="#000000"
-        android:textSize="12sp"
-        tools:text="Price"/>
-
     <ImageView
         android:id="@+id/user_photo"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginBottom="6dp"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="6dp"
-        android:scaleType="centerInside"
+        android:scaleType="fitCenter"
         android:contentDescription="@string/user_photo"
         tools:src="@mipmap/ic_launcher"/>
 
@@ -36,14 +22,25 @@
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/cost"
-        android:layout_toRightOf="@id/user_photo"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:textSize="18sp"
-        tools:text = "Description"/>
+        android:layout_marginLeft="16dp"
+        tools:text = "Description"
+        android:layout_alignTop="@+id/user_photo"
+        android:layout_toRightOf="@+id/user_photo"
+        android:layout_toEndOf="@+id/user_photo" />
 
+    <TextView
+        android:id="@+id/cost"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:maxLines="1"
+        android:paddingRight="4dp"
+        android:textColor="#000000"
+        android:textSize="12sp"
+        tools:text="Price"
+        android:layout_alignTop="@+id/description"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>

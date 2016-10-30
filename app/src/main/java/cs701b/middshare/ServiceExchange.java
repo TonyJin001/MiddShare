@@ -69,7 +69,7 @@ public class ServiceExchange extends AppCompatActivity {
         } else {
             mUserId = mFirebaseUser.getUid();
             mDatabase = FirebaseDatabase.getInstance().getReference();
-            Uri photoUri = Uri.parse("");
+            String photoUrl = "";
             String email = "";
             String name = "";
 
@@ -77,10 +77,12 @@ public class ServiceExchange extends AppCompatActivity {
                 String uid = profile.getUid();
                 profilePictureView = (ProfilePictureView) findViewById(R.id.profile_pic);
                 profilePictureView.setProfileId(uid);
-                photoUri = profile.getPhotoUrl();
+                photoUrl = "http://graph.facebook.com/" + uid + "/picture?width=800&height=600";
                 email = profile.getEmail();
                 name = profile.getDisplayName();
             }
+
+            final String finalPhotoUrl = photoUrl;
 
             if (!mDatabase.child("users").child(mUserId).child("name").equals(mFirebaseUser.getDisplayName())) {
                 mDatabase.child("users").child(mUserId).child("name").setValue(mFirebaseUser.getDisplayName());
@@ -90,9 +92,9 @@ public class ServiceExchange extends AppCompatActivity {
                 mDatabase.child("users").child(mUserId).child("email").setValue(mFirebaseUser.getEmail());
                 Log.d(TAG,"update email");
             }
-            if (!mDatabase.child("users").child(mUserId).child("photo").equals(mFirebaseUser.getPhotoUrl().toString())) {
-                if (!mFirebaseUser.getPhotoUrl().toString().equals(null)) {
-                    mDatabase.child("users").child(mUserId).child("photo").setValue(mFirebaseUser.getPhotoUrl().toString());
+            if (!mDatabase.child("users").child(mUserId).child("photo").equals(photoUrl)){
+                if (!photoUrl.equals(null)) {
+                    mDatabase.child("users").child(mUserId).child("photo").setValue(photoUrl);
                     Log.d(TAG,"update photo");
                 } else {
                     Log.d(TAG, "photo null");
@@ -124,9 +126,11 @@ public class ServiceExchange extends AppCompatActivity {
                     Log.d(TAG,model.getDescription()+"@"+model.getPrice());
                     price.setText(model.getPrice());
                     Log.d(TAG,"Photo url:" + model.getPhotoUrl());
-                    new GetProfilePhoto().execute(model.getPhotoUrl());
-                    Log.d(TAG,"Current bitmap: " + currentBitmap);
-                    userPhoto.setImageBitmap(currentBitmap);
+                    userPhoto.setImageURI(Uri.parse(model.getPhotoUrl()));
+                    new GetProfilePhoto(userPhoto).execute(model.getPhotoUrl());
+//                    // Photo profiles swap quickly, problem maybe with async task and global variable currentBitmap....
+//                    Log.d(TAG,"Current bitmap: " + currentBitmap);
+//                    userPhoto.setImageBitmap(currentBitmap);
                 }
             };
             seList.setAdapter(adapter);
@@ -198,6 +202,11 @@ public class ServiceExchange extends AppCompatActivity {
     class GetProfilePhoto extends AsyncTask<String, Void, Bitmap> {
 
         private Exception exception;
+        private ImageView bmImage;
+
+        public GetProfilePhoto(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
 
         protected Bitmap doInBackground(String... urlStr) {
             try {
@@ -218,7 +227,7 @@ public class ServiceExchange extends AppCompatActivity {
         }
 
         protected void onPostExecute(Bitmap bitmap) {
-            currentBitmap = bitmap;
+            bmImage.setImageBitmap(bitmap);
         }
     }
 
