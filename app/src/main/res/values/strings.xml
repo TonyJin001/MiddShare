@@ -10,4 +10,5 @@
     <string name="log_out">Log Out</string>
     <string name="user_photo">User Photo</string>
     <string name="currency">$</string>
+    <string name="submit">Submit</string>
 </resources>
