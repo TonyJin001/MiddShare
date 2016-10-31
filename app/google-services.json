@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "377044560517",
+    "firebase_url": "https://middshare.firebaseio.com",
+    "project_id": "middshare",
+    "storage_bucket": "middshare.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377044560517:android:6a17a12d45df46b8",
+        "android_client_info": {
+          "package_name": "cs701b.middshare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377044560517-jga3vmtn8ipt05g95411r3k3q408iqln.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCdTnyIo4N__jWhX9OZveHivVAsSvBrLQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,6 +3,7 @@
     <string name="edit_message">Email</string>
     <string name="edit_message2">Password</string>
     <string name="enter"> Log In</string>
+    <string name="addActivity"> Add Activity</string>
     <color name="white">#FFFFFF</color>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -10,4 +11,19 @@
     <string name="log_out">Log Out</string>
     <string name="user_photo">User Photo</string>
     <string name="currency">$</string>
+    <string name="title_activity_tab">TabActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_news_feed">Service Exchange</string>
+    <string name="title_activity_new_page">NewPage</string>
+    <string name="title_activity_create_new">CreateNew</string>
+    <string name="submit_new">Submit Request</string>
+    <string name="edit_message_request">Request Description</string>
+    <string name="edit_message_cost">Willingness to Pay or Receive</string>
+    <string name="edit_message_extrainfo">Additional Information</string>
+    <string name="sell_boolean">Sell</string>
+    <string name="buy_boolean">Buy</string>
+
+
+
 </resources>

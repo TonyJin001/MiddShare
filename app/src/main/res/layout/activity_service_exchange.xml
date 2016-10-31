@@ -13,10 +13,10 @@
     android:orientation="vertical">
 
     <com.facebook.login.widget.ProfilePictureView
-    android:id="@+id/profile_pic"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    />
+        android:id="@+id/profile_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 
     <ListView
         android:id="@+id/service_list"
@@ -42,7 +42,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Submit"/>
+        android:text="New Activity"
+        android:onClick="NewActivity"
+        />
 
     <Button
         android:id="@+id/logout_button"

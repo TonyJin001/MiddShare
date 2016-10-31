@@ -138,23 +138,25 @@ public class ServiceExchange extends AppCompatActivity {
             final EditText editDescription = (EditText) findViewById(R.id.edit_description);
             final EditText editPrice = (EditText) findViewById(R.id.edit_price);
             final Button seSubmit = (Button) findViewById(R.id.se_submit);
-            seSubmit.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View v) {
-
-                    String key = mDatabase.child("items").push().getKey();
-                    ServiceExchangeItem newItem = new ServiceExchangeItem(editDescription.getText().toString(),editPrice.getText().toString(),
-                            mFirebaseUser.getPhotoUrl().toString());
-                    Map<String,Object> newItemValues = newItem.toMap();
-
-                    Map<String,Object> childUpdates = new HashMap<>();
-                    childUpdates.put("/service_exchange_items/" + key, newItemValues);
-                    childUpdates.put("/user-service_exchange_items/" + mUserId + "/" + key, newItemValues);
-
-                    mDatabase.updateChildren(childUpdates);
-                    editDescription.setText("");
-                    editPrice.setText("");
-                }
-            });
+//            seSubmit.setOnClickListener(new View.OnClickListener(){
+//                public void onClick(View v) {
+//
+//                    String key = mDatabase.child("items").push().getKey();
+//                    ServiceExchangeItem newItem = new ServiceExchangeItem(editDescription.getText().toString(),editPrice.getText().toString(),
+//                            mFirebaseUser.getPhotoUrl().toString());
+//                    Map<String,Object> newItemValues = newItem.toMap();
+//
+//                    Map<String,Object> childUpdates = new HashMap<>();
+//                    childUpdates.put("/service_exchange_items/" + key, newItemValues);
+//                    childUpdates.put("/user-service_exchange_items/" + mUserId + "/" + key, newItemValues);
+//
+//                    mDatabase.updateChildren(childUpdates);
+//                    editDescription.setText("");
+//                    editPrice.setText("");
+//
+//                }
+//
+//            });
         }
     }
 
@@ -199,6 +201,10 @@ public class ServiceExchange extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void NewActivity() {
+        Intent intent = new Intent(this, CreateNew.class);
+        startActivity(intent);
+    }
     class GetProfilePhoto extends AsyncTask<String, Void, Bitmap> {
 
         private Exception exception;

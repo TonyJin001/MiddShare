@@ -13,4 +13,68 @@
     tools:context="cs701b.middshare.CreateNew"
     tools:showIn="@layout/activity_create_new">
 
+    <EditText android:id="@+id/edit_message_cost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_message_cost"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="7dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginBottom="203dp" />
+
+    <EditText android:id="@+id/edit_message_request"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_message_request"
+        android:layout_gravity="center_horizontal"
+        android:layout_above="@+id/edit_message_cost"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp" />
+
+    android:onClick="logIn"
+
+
+    <EditText android:id="@+id/edit_message_extrainfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_message_extrainfo"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/edit_message_request"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="54dp" />
+
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_above="@+id/edit_message_request"
+        android:layout_alignLeft="@+id/edit_message_cost"
+        android:layout_alignStart="@+id/edit_message_cost"
+        android:hint="@string/buy_boolean">
+
+        <RadioButton android:id="@+id/buy_boolean"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/buy_boolean"
+            android:onClick="onRadioButtonClicked"/>
+        <RadioButton android:id="@+id/sell_boolean"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sell_boolean"
+            android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/submit_new"
+        android:id="@+id/submit_new"
+        android:layout_marginTop="35dp"
+        android:layout_below="@+id/edit_message_extrainfo"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
