@@ -10,6 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cs701b.middshare.ServiceExchangeDetails">
+
     <LinearLayout
         android:id="@+id/outside_ll"
         android:layout_width="match_parent"
@@ -17,8 +18,8 @@
         android:layout_weight="9"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/item_info_ll"
+        <RelativeLayout
+            android:id="@+id/item_info_rl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -36,27 +37,51 @@
                 tools:src="@mipmap/ic_launcher"/>
 
             <TextView
-                android:id="@+id/description_details"
+                android:id="@+id/name_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
                 android:textSize="18sp"
+                android:textColor="#000000"
                 android:layout_marginLeft="16dp"
-                tools:text = "Description" />
+                android:layout_toRightOf="@id/user_photo_details"
+                tools:text = "User Name"/>
 
             <TextView
                 android:id="@+id/cost_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:paddingRight="4dp"
                 android:textColor="#000000"
                 android:textSize="12sp"
-                tools:text="Price" />
+                tools:text="Price"
+                android:layout_alignParentTop="true" />
 
+            <TextView
+                android:id="@+id/description_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:textSize="18sp"
+                tools:text = "Description"
+                android:layout_marginTop="11dp"
+                android:layout_below="@+id/name_details"
+                android:layout_alignLeft="@+id/name_details"
+                android:layout_alignStart="@+id/name_details" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/details_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                tools:text = "Details"
+                android:layout_alignBottom="@+id/user_photo_details"
+                android:layout_alignLeft="@+id/description_details"
+                android:layout_alignStart="@+id/description_details" />
+
+        </RelativeLayout>
 
         <ListView
             android:id="@+id/comments"
