@@ -48,7 +48,7 @@ public class CreateNew extends AppCompatActivity {
 
                     String key = mDatabase.child("items").push().getKey();
                     ServiceExchangeItem newItem = new ServiceExchangeItem(editDescription.getText().toString(), editPrice.getText().toString(),
-                            mFirebaseUser.getPhotoUrl().toString());
+                            mFirebaseUser.getPhotoUrl().toString(),mFirebaseUser.getDisplayName(),editExtra.getText().toString());
                     Map<String, Object> newItemValues = newItem.toMap();
 
                     Map<String, Object> childUpdates = new HashMap<>();

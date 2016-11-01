@@ -13,14 +13,18 @@ public class ServiceExchangeItem {
     private String description;
     private String price;
     private String photoUrl;
+    private String name;
+    private String details;
 
     public ServiceExchangeItem() {
 
     }
 
-    public ServiceExchangeItem(String description, String price, String photoUrl) {
+    public ServiceExchangeItem(String description, String price, String photoUrl, String name, String details) {
         this.description = description;
         this.price = price;
+        this.name = name;
+        this.details = details;
         if (photoUrl.equals(null)) {
             this.photoUrl = "";
             Log.d("SEItem","url is null");
@@ -35,6 +39,8 @@ public class ServiceExchangeItem {
         result.put("description", description);
         result.put("price",price);
         result.put("photoUrl",photoUrl);
+        result.put("name",name);
+        result.put("details",details);
         return result;
     }
 
@@ -60,5 +66,21 @@ public class ServiceExchangeItem {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
     }
 }
