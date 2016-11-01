@@ -16,11 +16,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class ServiceExchangeDetails extends AppCompatActivity {
@@ -38,6 +41,9 @@ public class ServiceExchangeDetails extends AppCompatActivity {
     private LruCache<String,Bitmap> mMemoryCache;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
+    private String mUserId;
+    private DatabaseReference mDatabase;
+
 
 
 //    public ServiceExchangeDetails() {
@@ -85,12 +91,13 @@ public class ServiceExchangeDetails extends AppCompatActivity {
 
             final ListView commentList = (ListView) findViewById(R.id.comments);
 
-            FirebaseListAdapter<ServiceExchangeItem> adapter = new FirebaseListAdapter<ServiceExchangeItem>(
+            FirebaseListAdapter<Comment> adapter = new FirebaseListAdapter<Comment>(
                     this,
-                    ServiceExchangeItem.class,
-                    R.layout.list_item_service_exchange,
-                    mDatabase.child("service_exchange_items")
-            ) {
+                    Comment.class,
+                    R.layout.list_comment_detail,
+                    //mDatabase.child("service_exchange_items")
+            ) //tony's copy pasted code
+            /*{
                 @Override
                 protected void populateView(View v, ServiceExchangeItem model, int position) {
                     ImageView userPhoto = (ImageView) v.findViewById(R.id.user_photo);
@@ -106,25 +113,9 @@ public class ServiceExchangeDetails extends AppCompatActivity {
 //                    Log.d(TAG,"Current bitmap: " + currentBitmap);
 //                    userPhoto.setImageBitmap(currentBitmap);
                 }
-            };
-            seList.setAdapter(adapter);
-            seList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    ServiceExchangeItem itemDetails = (ServiceExchangeItem) parent.getAdapter().getItem(position);
-                    String itemDescription = itemDetails.getDescription();
-                    String itemPrice =  itemDetails.getPrice();
-                    String itemPhotoUrl = itemDetails.getPhotoUrl();
-                    Log.d(TAG,itemDescription +"\t" + itemPrice + "\t" + itemPhotoUrl);
-                    Intent intent = new Intent(ServiceExchange.this,ServiceExchangeDetails.class);
-                    Bundle extras = new Bundle();
-                    extras.putString("EXTRA_DESCRIPTION",itemDetails.getDescription());
-                    extras.putString("EXTRA_PRICE",itemDetails.getPrice());
-                    extras.putString("EXTRA_PHOTOURL",itemDetails.getPhotoUrl());
-                    intent.putExtras(extras);
-                    startActivity(intent);
-                }
-            });
+            };*/
+            commentList.setAdapter(adapter);
+
 
         }
     }
@@ -147,5 +138,28 @@ public class ServiceExchangeDetails extends AppCompatActivity {
         price.setText(extras.getString("EXTRA_PRICE"));
         new GetProfilePhoto(userPhoto).execute(extras.getString("EXTRA_PHOTOURL"));
 
+    }
+    private void logOut (View view) {
+        mFirebaseAuth.signOut();
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        LoginManager.getInstance().logOut();
+        loadLoginView();
+    }
+
+    private void loadLoginView() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if (getBitmapFromMemCache(key) == null) {
+            mMemoryCache.put(key,bitmap);
+        }
+    }
+
+    public Bitmap getBitmapFromMemCache(String key) {
+        return mMemoryCache.get(key);
     }
 }
