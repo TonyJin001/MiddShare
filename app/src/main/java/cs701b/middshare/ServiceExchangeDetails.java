@@ -97,23 +97,23 @@ public class ServiceExchangeDetails extends AppCompatActivity {
                     R.layout.list_comment_detail,
                     //mDatabase.child("service_exchange_items")
             ) //tony's copy pasted code
-            /*{
+            {
                 @Override
-                protected void populateView(View v, ServiceExchangeItem model, int position) {
-                    ImageView userPhoto = (ImageView) v.findViewById(R.id.user_photo);
-                    TextView description = (TextView) v.findViewById(R.id.description);
-                    TextView price = (TextView) v.findViewById(R.id.cost);
-                    description.setText(model.getDescription());
-                    Log.d(TAG,model.getDescription()+"@"+model.getPrice());
-                    price.setText(model.getPrice());
-                    Log.d(TAG,"Photo url:" + model.getPhotoUrl());
-                    userPhoto.setImageURI(Uri.parse(model.getPhotoUrl()));
-                    new GetProfilePhoto(userPhoto).execute(model.getPhotoUrl());
+                protected void populateView(View v, Comment com, int position) {
+                    ImageView userPhoto = (ImageView) v.findViewById(R.id.comment_user_photo);
+                    TextView comment = (TextView) v.findViewById(R.id.comment_user_comment);
+                    TextView name = (TextView) v.findViewById(R.id.comment_user_name);
+                    comment.setText(com.getComment());
+                    name.setText(com.getName());
+                    Log.d(TAG,com.getComment());
+                    Log.d(TAG,"Photo url:" + com.getPhotoUrl());
+                    userPhoto.setImageURI(Uri.parse(com.getPhotoUrl()));
+                    new GetProfilePhoto(userPhoto).execute(com.getPhotoUrl());
 //                    // Photo profiles swap quickly, problem maybe with async task and global variable currentBitmap....
 //                    Log.d(TAG,"Current bitmap: " + currentBitmap);
 //                    userPhoto.setImageBitmap(currentBitmap);
                 }
-            };*/
+            };
             commentList.setAdapter(adapter);
 
 
