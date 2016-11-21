@@ -19,8 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ServiceExchange" />
-        <activity android:name=".CreateNew"/>
-        <activity android:name=".ServiceExchangeDetails"/>
+        <activity android:name=".CreateNew" />
+        <activity android:name=".ServiceExchangeDetails" />
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -28,9 +28,19 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             tools:replace="android:theme" />
 
+        <service android:name=".FirebaseNotificationService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@color/colorAccent"></meta-data>
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -40,7 +50,8 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".ServiceExchangeDetails" />
-        <activity android:name=".CreateNew"></activity>
+        <activity android:name=".CreateNew" />
+
     </application>
 
 </manifest>
