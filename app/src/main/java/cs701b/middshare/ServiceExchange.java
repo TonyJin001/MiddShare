@@ -176,12 +176,16 @@ public class ServiceExchange extends AppCompatActivity {
                     String itemDescription = itemDetails.getDescription();
                     String itemPrice =  itemDetails.getPrice();
                     String itemPhotoUrl = itemDetails.getPhotoUrl();
+                    String itemName = itemDetails.getName();
+                    String itemDetailedInfo = itemDetails.getDetails();
                     Log.d(TAG,itemDescription +"\t" + itemPrice + "\t" + itemPhotoUrl);
                     Intent intent = new Intent(ServiceExchange.this,ServiceExchangeDetails.class);
                     Bundle extras = new Bundle();
-                    extras.putString("EXTRA_DESCRIPTION",itemDetails.getDescription());
-                    extras.putString("EXTRA_PRICE",itemDetails.getPrice());
-                    extras.putString("EXTRA_PHOTOURL",itemDetails.getPhotoUrl());
+                    extras.putString("EXTRA_DESCRIPTION",itemDescription);
+                    extras.putString("EXTRA_PRICE",itemPrice);
+                    extras.putString("EXTRA_PHOTOURL",itemPhotoUrl);
+                    extras.putString("EXTRA_NAME", itemName);
+                    extras.putString("EXTRA_DETAILS",itemDetailedInfo);
                     intent.putExtras(extras);
                     startActivity(intent);
                 }

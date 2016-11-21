@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ServiceExchangeDetails extends AppCompatActivity {
@@ -16,11 +17,13 @@ public class ServiceExchangeDetails extends AppCompatActivity {
     private ImageView userPhoto;
     private TextView description;
     private TextView price;
+    private TextView name;
+    private TextView details;
     private ListView comments;
     private EditText writeComment;
     private Button submitComment;
     private LinearLayout outsideLL;
-    private LinearLayout itemInfoLL;
+    private RelativeLayout itemInfoRL;
     private LinearLayout bottomLL;
     private final String TAG = "Service Exchange Detail";
 
@@ -38,13 +41,15 @@ public class ServiceExchangeDetails extends AppCompatActivity {
         Log.d(TAG,"Before outsideLL");
         outsideLL = (LinearLayout) findViewById(R.id.outside_ll);
         Log.d(TAG,"after outsideLL");
-        itemInfoLL = (LinearLayout) outsideLL.findViewById(R.id.item_info_ll);
+        itemInfoRL = (RelativeLayout) outsideLL.findViewById(R.id.item_info_rl);
         Log.d(TAG,"after itemInfoLL");
-        userPhoto = (ImageView) itemInfoLL.findViewById(R.id.user_photo_details);
+        userPhoto = (ImageView) itemInfoRL.findViewById(R.id.user_photo_details);
         Log.d(TAG,"after userphoto");
-        description = (TextView) itemInfoLL.findViewById(R.id.description_details);
+        description = (TextView) itemInfoRL.findViewById(R.id.description_details);
         Log.d(TAG,"after description");
-        price = (TextView) itemInfoLL.findViewById(R.id.cost_details);
+        price = (TextView) itemInfoRL.findViewById(R.id.cost_details);
+        name = (TextView) itemInfoRL.findViewById(R.id.name_details);
+        details = (TextView) itemInfoRL.findViewById(R.id.details_details);
         Log.d(TAG,"after price");
         comments = (ListView) outsideLL.findViewById(R.id.comments);
         Log.d(TAG,"after comments");
@@ -62,6 +67,8 @@ public class ServiceExchangeDetails extends AppCompatActivity {
         description.setText(extras.getString("EXTRA_DESCRIPTION"));
         Log.d(TAG,"after setdescription");
         price.setText(extras.getString("EXTRA_PRICE"));
+        name.setText(extras.getString("EXTRA_NAME"));
+        details.setText(extras.getString("EXTRA_DETAILS"));
         Log.d(TAG,"after setprice");
         new GetProfilePhoto(userPhoto).execute(extras.getString("EXTRA_PHOTOURL"));
         Log.d(TAG,"after getprofilephoto");
