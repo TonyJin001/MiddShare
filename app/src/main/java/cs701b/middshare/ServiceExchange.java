@@ -65,6 +65,8 @@ public class ServiceExchange extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_exchange);
+        // hasn't verified isRegistered... yet
+
 
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory()/1024);
         final int cacheSize = maxMemory/8;
@@ -136,14 +138,14 @@ public class ServiceExchange extends AppCompatActivity {
 
             final ListView seList = (ListView) findViewById(R.id.service_list);
 
-            FirebaseListAdapter<ServiceExchangeItem> adapter = new FirebaseListAdapter<ServiceExchangeItem>(
+            FirebaseListAdapter<ServiceExchangeItemNoTime> adapter = new FirebaseListAdapter<ServiceExchangeItemNoTime>(
                     this,
-                    ServiceExchangeItem.class,
+                    ServiceExchangeItemNoTime.class,
                     R.layout.list_item_service_exchange,
                     mDatabase.child("service_exchange_items")
             ) {
                 @Override
-                protected void populateView(View v, ServiceExchangeItem model, int position) {
+                protected void populateView(View v, ServiceExchangeItemNoTime model, int position) {
                     ImageView userPhoto = (ImageView) v.findViewById(R.id.user_photo);
                     TextView description = (TextView) v.findViewById(R.id.description);
                     TextView price = (TextView) v.findViewById(R.id.cost);
@@ -172,7 +174,7 @@ public class ServiceExchange extends AppCompatActivity {
             seList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    ServiceExchangeItem itemDetails = (ServiceExchangeItem) parent.getAdapter().getItem(position);
+                    ServiceExchangeItemNoTime itemDetails = (ServiceExchangeItemNoTime) parent.getAdapter().getItem(position);
                     String itemDescription = itemDetails.getDescription();
                     String itemPrice =  itemDetails.getPrice();
                     String itemPhotoUrl = itemDetails.getPhotoUrl();
@@ -190,6 +192,8 @@ public class ServiceExchange extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+
+            startService(new Intent(this,NotificationListener.class));
 
         }
     }

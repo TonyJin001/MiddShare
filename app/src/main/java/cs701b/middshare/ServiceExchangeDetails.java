@@ -84,13 +84,6 @@ public class ServiceExchangeDetails extends AppCompatActivity {
             final String finalPhotoUrl = photoUrl;
 
 
-            Button bLogOut = (Button) findViewById(R.id.logout_button);
-            bLogOut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    logOut(v);
-                }
-            });
 
             final ListView commentList = (ListView) findViewById(R.id.comments);
 
@@ -129,19 +122,14 @@ public class ServiceExchangeDetails extends AppCompatActivity {
 
     private void initView() {
 
-        Log.d(TAG,"Before outsideLL");
         outsideLL = (LinearLayout) findViewById(R.id.outside_ll);
-        Log.d(TAG,"after outsideLL");
         itemInfoRL = (RelativeLayout) outsideLL.findViewById(R.id.item_info_rl);
-        Log.d(TAG,"after itemInfoLL");
         userPhoto = (ImageView) itemInfoRL.findViewById(R.id.user_photo_details);
-        Log.d(TAG,"after userphoto");
         description = (TextView) itemInfoRL.findViewById(R.id.description_details);
-        Log.d(TAG,"after description");
         price = (TextView) itemInfoRL.findViewById(R.id.cost_details);
         name = (TextView) itemInfoRL.findViewById(R.id.name_details);
         details = (TextView) itemInfoRL.findViewById(R.id.details_details);
-        Log.d(TAG,"after price");
+
 
         comments = (ListView) outsideLL.findViewById(R.id.comments);
         bottomLL = (LinearLayout) findViewById(R.id.bottom_ll);
@@ -154,7 +142,6 @@ public class ServiceExchangeDetails extends AppCompatActivity {
         price.setText(extras.getString("EXTRA_PRICE"));
         name.setText(extras.getString("EXTRA_NAME"));
         details.setText(extras.getString("EXTRA_DETAILS"));
-        Log.d(TAG,"after setprice");
         new GetProfilePhoto(userPhoto).execute(extras.getString("EXTRA_PHOTOURL"));
 
     }
