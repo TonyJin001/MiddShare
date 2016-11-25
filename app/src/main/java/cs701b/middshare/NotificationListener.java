@@ -53,7 +53,7 @@ public class NotificationListener extends Service {
 
                 // Only sends a notification to the user if the child is added after the app starts
                 // and if the child was not added by the user him/herself
-                if ((item.getTime() > time || item.getTime() == 0 || time == 0) && !mFirebaseUser.getDisplayName().equals(item.getName())) {
+                if ((item.getTime() > time) && !mFirebaseUser.getDisplayName().equals(item.getName())) {
                     showNotification(item.getDescription(),item.getName(),item.getPhotoUrl(),item.getPrice(),item.getDetails());
                 }
                 if (mFirebaseUser.getDisplayName().equals(item.getName())){
