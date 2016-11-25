@@ -98,7 +98,7 @@ public class ServiceExchangeDetails extends AppCompatActivity {
                     this,
                     Comment.class,
                     R.layout.list_comment_detail,
-                    //mDatabase.child("service_exchange_items")
+                    mDatabase.child("service_exchange_comment_detail")
             ) //tony's copy pasted code
             {
                 @Override
@@ -111,13 +111,17 @@ public class ServiceExchangeDetails extends AppCompatActivity {
                     Log.d(TAG,com.getComment());
                     Log.d(TAG,"Photo url:" + com.getPhotoUrl());
                     userPhoto.setImageURI(Uri.parse(com.getPhotoUrl()));
-                    new GetProfilePhoto(userPhoto).execute(com.getPhotoUrl());
+                    final Bitmap bitmap = getBitmapFromMemCache(com.getPhotoUrl());
+                    if (bitmap != null) {
+                        userPhoto.setImageBitmap(bitmap);
+                    } else {
+                        new GetProfilePhoto(userPhoto).execute(com.getPhotoUrl());
+                    }
 //                    // Photo profiles swap quickly, problem maybe with async task and global variable currentBitmap....
 //                    Log.d(TAG,"Current bitmap: " + currentBitmap);
 //                    userPhoto.setImageBitmap(currentBitmap);
                 }
             };
-            commentList.setAdapter(adapter);
 
 
         }
