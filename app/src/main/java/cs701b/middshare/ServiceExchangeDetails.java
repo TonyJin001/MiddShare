@@ -99,6 +99,7 @@ public class ServiceExchangeDetails extends AppCompatActivity {
 
                          Map<String, Object> childUpdates = new HashMap<>();
                          childUpdates.put("/item-comments/" + key, comValues);
+                        //this needs to be fixed (itemKey)
                          childUpdates.put("/service_exchange_items/" + itemKey + "/" + key, comValues);
 
                          mDatabase.updateChildren(childUpdates);
@@ -111,6 +112,7 @@ public class ServiceExchangeDetails extends AppCompatActivity {
                             this,
                             Comment.class,
                             R.layout.list_comment_detail,
+                            //this needs to be fixed (itemKey)
                             mDatabase.child("item-comments/"+itemKey)
                     )
                     {
@@ -162,6 +164,7 @@ public class ServiceExchangeDetails extends AppCompatActivity {
         price.setText(extras.getString("EXTRA_PRICE"));
         name.setText(extras.getString("EXTRA_NAME"));
         details.setText(extras.getString("EXTRA_DETAILS"));
+        //this needs to be fixed (itemKey)
         itemKey.setText(extras.getString("EXTRA_ITEM_KEY"));
         new GetProfilePhoto(userPhoto).execute(extras.getString("EXTRA_PHOTOURL"));
 
