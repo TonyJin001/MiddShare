@@ -17,5 +17,5 @@
     <string name="edit_message_extrainfo">Additional Information</string>
     <string name="sell_boolean">Sell</string>
     <string name="buy_boolean">Buy</string>
-    <String name="enable_time_limit">Set a Time Limit</String>
+    <string name="enable_time_limit">Set a Time Limit</string>
 </resources>

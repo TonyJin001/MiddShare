@@ -22,7 +22,8 @@
         <activity
             android:name=".CreateNew"
             android:windowSoftInputMode="stateAlwaysVisible"/>
-        <activity android:name=".ServiceExchangeDetails" />
+        <activity android:name=".ServiceExchangeDetails"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
