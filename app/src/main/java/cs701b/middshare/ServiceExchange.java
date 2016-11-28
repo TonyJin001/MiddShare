@@ -109,6 +109,13 @@ public class ServiceExchange extends AppCompatActivity {
                 name = profile.getDisplayName();
             }
 
+            profilePictureView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    Intent intent = new Intent(ServiceExchange.this,UserPage.class);
+                    startActivity(intent);
+                }
+            });
+
             final String finalPhotoUrl = photoUrl;
 
             if (!mDatabase.child("users").child(mUserId).child("name").equals(mFirebaseUser.getDisplayName())) {
@@ -171,6 +178,7 @@ public class ServiceExchange extends AppCompatActivity {
                 }
             };
             seList.setAdapter(adapter);
+
             seList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
