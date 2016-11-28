@@ -51,8 +51,9 @@
         <activity android:name=".ServiceExchangeDetails" />
         <activity android:name=".CreateNew" />
 
-        <service
-            android:name=".NotificationListener" />
+        <service android:name=".NotificationListener" />
+
+        <activity android:name=".UserPage"></activity>
     </application>
 
 </manifest>
