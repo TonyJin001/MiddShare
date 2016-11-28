@@ -190,6 +190,7 @@ public class ServiceExchange extends AppCompatActivity {
                     extras.putString("EXTRA_NAME", itemName);
                     extras.putString("EXTRA_DETAILS",itemDetailedInfo);
                     extras.putString("EXTRA_ITEM_KEY",itemKey);
+                    Log.d(TAG, itemKey);
 
                     intent.putExtras(extras);
                     startActivity(intent);

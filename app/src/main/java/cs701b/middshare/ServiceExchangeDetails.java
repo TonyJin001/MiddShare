@@ -37,7 +37,7 @@ public class ServiceExchangeDetails extends AppCompatActivity {
     private TextView price;
     private TextView name;
     private TextView details;
-    private TextView itemKey;
+    private String itemKey;
     private ListView comments;
     private EditText writeComment;
     private Button submitComment;
@@ -94,49 +94,48 @@ public class ServiceExchangeDetails extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                          String key = mDatabase.child("item-comments").push().getKey();
-                         Comment comment = new Comment(mFirebaseUser.getDisplayName(), writeComment.toString(), mFirebaseUser.getPhotoUrl().toString());
+                         Comment comment = new Comment(mFirebaseUser.getDisplayName(), writeComment.getText().toString(), mFirebaseUser.getPhotoUrl().toString());
                          Map<String, Object> comValues = comment.toMap();
 
                          Map<String, Object> childUpdates = new HashMap<>();
-                         childUpdates.put("/item-comments/" + key, comValues);
-                        //this needs to be fixed (itemKey)
-                         childUpdates.put("/service_exchange_items/" + itemKey + "/" + key, comValues);
+                         childUpdates.put("/item-comments/" + itemKey + "/" + key, comValues);
 
                          mDatabase.updateChildren(childUpdates);
                          writeComment.setText("");
 
                      }
                  });
-                    FirebaseListAdapter < Comment > adapter = new FirebaseListAdapter<Comment>(
+            final FirebaseListAdapter <Comment> adapter = new FirebaseListAdapter<Comment>(
 
-                            this,
-                            Comment.class,
-                            R.layout.list_comment_detail,
-                            //this needs to be fixed (itemKey)
-                            mDatabase.child("item-comments/"+itemKey)
-                    )
-                    {
-                        @Override
-                        protected void populateView(View v, Comment com, int position) {
-                            ImageView userPhoto = (ImageView) v.findViewById(R.id.comment_user_photo);
-                            TextView comment = (TextView) v.findViewById(R.id.comment_user_comment);
-                            TextView name = (TextView) v.findViewById(R.id.comment_user_name);
-                            comment.setText(com.getComment());
-                            name.setText(com.getName());
-                            Log.d(TAG, com.getComment());
-                            Log.d(TAG, "Photo url:" + com.getPhotoUrl());
-                            userPhoto.setImageURI(Uri.parse(com.getPhotoUrl()));
-                            final Bitmap bitmap = getBitmapFromMemCache(com.getPhotoUrl());
-                            if (bitmap != null) {
-                                userPhoto.setImageBitmap(bitmap);
-                            } else {
-                                new GetProfilePhoto(userPhoto).execute(com.getPhotoUrl());
-                            }
+                    this,
+                    Comment.class,
+                    R.layout.list_comment_detail,
+                    //this needs to be fixed (itemKey)
+                    mDatabase.child("item-comments/"+itemKey)
+            )
+            {
+                @Override
+                protected void populateView(View v, Comment com, int position) {
+                    ImageView userPhoto = (ImageView) v.findViewById(R.id.comment_user_photo);
+                    TextView comment = (TextView) v.findViewById(R.id.comment_user_comment);
+                    TextView name = (TextView) v.findViewById(R.id.comment_user_name);
+                    comment.setText(com.getComment());
+                    name.setText(com.getName());
+                    Log.d(TAG, com.getComment());
+                    Log.d(TAG, "Photo url:" + com.getPhotoUrl());
+                    userPhoto.setImageURI(Uri.parse(com.getPhotoUrl()));
+                    final Bitmap bitmap = getBitmapFromMemCache(com.getPhotoUrl());
+                    if (bitmap != null) {
+                        userPhoto.setImageBitmap(bitmap);
+                    } else {
+                        new GetProfilePhoto(userPhoto).execute(com.getPhotoUrl());
+                    }
 //                    // Photo profiles swap quickly, problem maybe with async task and global variable currentBitmap....
 //                    Log.d(TAG,"Current bitmap: " + currentBitmap);
 //                    userPhoto.setImageBitmap(currentBitmap);
-                        }
-                    };
+                }
+            };
+            commentList.setAdapter(adapter);
 
 
         }
@@ -165,7 +164,8 @@ public class ServiceExchangeDetails extends AppCompatActivity {
         name.setText(extras.getString("EXTRA_NAME"));
         details.setText(extras.getString("EXTRA_DETAILS"));
         //this needs to be fixed (itemKey)
-        itemKey.setText(extras.getString("EXTRA_ITEM_KEY"));
+
+        itemKey = extras.getString("EXTRA_ITEM_KEY");
         new GetProfilePhoto(userPhoto).execute(extras.getString("EXTRA_PHOTOURL"));
 
 
