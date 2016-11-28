@@ -17,18 +17,21 @@ public class ServiceExchangeItem {
     private String name;
     private String details;
     private Map<String,String> time;
-    private ArrayList<Comment> comments;
+    private long timeLimit;
+    private boolean buy;
 
     public ServiceExchangeItem() {
 
     }
 
-    public ServiceExchangeItem(String description, String price, String photoUrl, String name, String details, Map<String,String> time) {
+    public ServiceExchangeItem(String description, String price, String photoUrl, String name, String details, Map<String,String> time, boolean buy, long timeLimit) {
         this.description = description;
         this.price = price;
         this.name = name;
         this.details = details;
         this.time = time;
+        this.buy = buy;
+        this.timeLimit = timeLimit;
         if (photoUrl.equals(null)) {
             this.photoUrl = "";
             Log.d("SEItem","url is null");
@@ -46,7 +49,8 @@ public class ServiceExchangeItem {
         result.put("name",name);
         result.put("details",details);
         result.put("time",time);
-        result.put("comments", comments);
+        result.put("buy",buy);
+        result.put("timeLimit",timeLimit);
         return result;
     }
 
@@ -98,7 +102,20 @@ public class ServiceExchangeItem {
         this.time = time;
     }
 
-
-
+    public boolean isBuy() {
+        return buy;
     }
+
+    public void setBuy(boolean buy) {
+        this.buy = buy;
+    }
+
+    public long getTimeLimit() {
+        return timeLimit;
+    }
+
+    public void setTimeLimit(long timeLimit) {
+        this.timeLimit = timeLimit;
+    }
+}
 

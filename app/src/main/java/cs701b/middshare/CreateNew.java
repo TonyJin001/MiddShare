@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,7 @@ import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -41,13 +43,14 @@ public class CreateNew extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private final String TAG = "Create_New";
-    private String buyOrSell = "";
+    private boolean buy = true;
     private TextView untilTime;
     private LinearLayout llValidTime;
     private EditText editValidHour;
     private TextView hour;
     private EditText editValidMinute;
     private TextView minute;
+    private long timeLimit = -1;
 
 
     @Override
@@ -69,6 +72,9 @@ public class CreateNew extends AppCompatActivity {
             final EditText editPrice = (EditText) findViewById(R.id.edit_message_cost);
             final EditText editExtra = (EditText) findViewById(R.id.edit_message_extrainfo);
             final Button seSubmit = (Button) findViewById(R.id.submit_new);
+            final RadioButton validFor = (RadioButton) findViewById(R.id.rb_valid_for);
+            final RadioButton validUntil = (RadioButton) findViewById(R.id.rb_valid_until);
+
             untilTime = (TextView) findViewById(R.id.until_time);
             llValidTime = (LinearLayout) findViewById(R.id.ll_valid_time);
             editValidHour = (EditText) llValidTime.findViewById(R.id.valid_hour);
@@ -105,8 +111,29 @@ public class CreateNew extends AppCompatActivity {
                     if (cost.startsWith(getString(R.string.currency))){
                         cost = cost.substring(1);
                     }
+
+                    // If the user entered how long the request is valid for
+                    if (validFor.isChecked() && !(editValidHour.getText().toString().equals("")) && !(editValidMinute.getText().toString().equals(""))){
+                        Calendar currentTime = Calendar.getInstance();
+                        currentTime.setTime(new Date());
+                        Log.d(TAG,"current time before adding hour"+currentTime.getTime());
+                        currentTime.add(Calendar.HOUR_OF_DAY,Integer.parseInt(editValidHour.getText().toString()));
+                        Log.d(TAG,"current time before adding minute"+currentTime.getTime());
+                        currentTime.add(Calendar.MINUTE,Integer.parseInt(editValidMinute.getText().toString()));
+                        Log.d(TAG,"current time final"+currentTime.getTime());
+                        timeLimit = currentTime.getTimeInMillis();
+                    }
+
+                    if (validFor.isChecked() && ((editValidHour.getText().toString().equals("")) || (editValidMinute.getText().toString().equals("")))) {
+                        timeLimit = -1;
+                    }
+
+                    if (validUntil.isChecked() && untilTime.getText().toString().equals("")){
+                        timeLimit = -1;
+                    }
+
                     ServiceExchangeItem newItem = new ServiceExchangeItem(editDescription.getText().toString(), cost,
-                            mFirebaseUser.getPhotoUrl().toString(),mFirebaseUser.getDisplayName(),editExtra.getText().toString(),ServerValue.TIMESTAMP);
+                            mFirebaseUser.getPhotoUrl().toString(),mFirebaseUser.getDisplayName(),editExtra.getText().toString(),ServerValue.TIMESTAMP, buy, timeLimit);
                     Map<String, Object> newItemValues = newItem.toMap();
 
                     Map<String, Object> childUpdates = new HashMap<>();
@@ -118,7 +145,7 @@ public class CreateNew extends AppCompatActivity {
                     editPrice.setText("");
                     editExtra.setText("");
 
-                    Toast.makeText(CreateNew.this, "" + buyOrSell, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateNew.this, "buy: " + buy, Toast.LENGTH_SHORT).show();
 
                     finish();
                 }
@@ -138,12 +165,12 @@ public class CreateNew extends AppCompatActivity {
         switch(view.getId()) {
             case R.id.buy_boolean:
                 if (checked) {
-                    buyOrSell = "buy";
+                    buy = true;
                     break;
                 }
             case R.id.sell_boolean:
                 if (checked) {
-                    buyOrSell = "sell";
+                    buy = false;
                     break;
                 }
         }
@@ -181,6 +208,7 @@ public class CreateNew extends AppCompatActivity {
                                     untilTime.setText(dateFormatter.format(newDate.getTime()));
                                     Log.d(TAG,newDate.getTimeInMillis()+"");
                                     Log.d(TAG,newDate.getTime().toString());
+                                    timeLimit = newDate.getTimeInMillis();
                                 }
                             },newCalendar.get(Calendar.HOUR_OF_DAY),newCalendar.get(Calendar.MINUTE),false);
                             timePicker.show();
@@ -207,8 +235,6 @@ public class CreateNew extends AppCompatActivity {
                     InputMethodManager keyboard = (InputMethodManager)
                             getSystemService(Context.INPUT_METHOD_SERVICE);
                     keyboard.showSoftInput(editValidHour,0);
-
-
                     break;
                 }
         }

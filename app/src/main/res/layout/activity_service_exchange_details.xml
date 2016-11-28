@@ -54,10 +54,32 @@
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:paddingRight="4dp"
+                android:paddingLeft="1dp"
                 android:textColor="#000000"
                 android:textSize="12sp"
                 tools:text="Price"
                 android:layout_alignParentTop="true" />
+
+
+
+            <TextView
+                android:id="@+id/currency_sign_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/currency"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                android:layout_toLeftOf="@id/cost_details"
+                android:layout_alignTop="@id/cost_details"
+                android:paddingLeft="4dp"/>
+
+            <TextView
+                android:id="@+id/buy_sell"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_toLeftOf="@id/currency_sign_details"
+                android:layout_alignBottom="@id/currency_sign_details"/>
 
             <TextView
                 android:id="@+id/description_details"

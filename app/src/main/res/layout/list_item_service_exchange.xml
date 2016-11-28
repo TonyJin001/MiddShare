@@ -44,22 +44,34 @@
         android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:maxLines="1"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="1dp"
         android:paddingRight="4dp"
         android:textColor="#000000"
-        android:textSize="12sp"
+        android:textSize="11sp"
         tools:text="Price"
         android:layout_alignTop="@+id/description"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
     <TextView
+        android:id="@+id/currency_sign"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/currency"
         android:textColor="#000000"
-        android:textSize="12sp"
+        android:textSize="11sp"
+        android:layout_marginLeft="4dp"
         android:layout_toLeftOf="@id/cost"
         android:layout_alignTop="@id/cost"/>
+
+    <TextView
+        android:id="@+id/buy_sell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_toLeftOf="@id/currency_sign"
+        android:layout_alignBottom="@id/currency_sign"/>
 
 
 </RelativeLayout>

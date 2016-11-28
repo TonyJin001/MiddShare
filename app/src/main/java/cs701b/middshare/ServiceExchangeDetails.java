@@ -2,6 +2,7 @@ package cs701b.middshare;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ public class ServiceExchangeDetails extends AppCompatActivity {
     private TextView price;
     private TextView name;
     private TextView details;
+    private TextView buySellDetails;
     private String itemKey;
     private ListView comments;
     private EditText writeComment;
@@ -150,6 +152,7 @@ public class ServiceExchangeDetails extends AppCompatActivity {
         price = (TextView) itemInfoRL.findViewById(R.id.cost_details);
         name = (TextView) itemInfoRL.findViewById(R.id.name_details);
         details = (TextView) itemInfoRL.findViewById(R.id.details_details);
+        buySellDetails = (TextView) itemInfoRL.findViewById(R.id.buy_sell);
 
 
         comments = (ListView) outsideLL.findViewById(R.id.comments);
@@ -163,6 +166,12 @@ public class ServiceExchangeDetails extends AppCompatActivity {
         price.setText(extras.getString("EXTRA_PRICE"));
         name.setText(extras.getString("EXTRA_NAME"));
         details.setText(extras.getString("EXTRA_DETAILS"));
+        buySellDetails.setText(extras.getString("EXTRA_BUY_SELL"));
+        if (buySellDetails.getText().toString().equals("Buying for")){
+            buySellDetails.setTextColor(Color.parseColor("#E91E63"));
+        } else {
+            buySellDetails.setTextColor(Color.parseColor("#4CAF50"));
+        }
         //this needs to be fixed (itemKey)
 
         itemKey = extras.getString("EXTRA_ITEM_KEY");

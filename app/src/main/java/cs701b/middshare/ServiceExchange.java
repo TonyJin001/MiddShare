@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -38,6 +39,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -149,10 +152,18 @@ public class ServiceExchange extends AppCompatActivity {
                     ImageView userPhoto = (ImageView) v.findViewById(R.id.user_photo);
                     TextView description = (TextView) v.findViewById(R.id.description);
                     TextView price = (TextView) v.findViewById(R.id.cost);
-                    TextView userName = (TextView) v.findViewById(R.id.user_name)
-                            ;
+                    TextView userName = (TextView) v.findViewById(R.id.user_name);
+                    TextView buySell = (TextView) v.findViewById(R.id.buy_sell);
+
                     description.setText(model.getDescription());
                     userName.setText(model.getName());
+                    if (model.isBuy()){
+                        buySell.setText("Buying for");
+                        buySell.setTextColor(Color.parseColor("#E91E63"));
+                    } else {
+                        buySell.setText("Selling for");
+                        buySell.setTextColor(Color.parseColor("#4CAF50"));
+                    }
 
                     Log.d(TAG,model.getDescription()+"@"+model.getPrice());
                     price.setText(model.getPrice());
@@ -181,6 +192,12 @@ public class ServiceExchange extends AppCompatActivity {
                     String itemName = itemDetails.getName();
                     String itemDetailedInfo = itemDetails.getDetails();
                     String itemKey = adapter.getRef(position).getKey();
+                    String itemBuySell = "";
+                    if (itemDetails.isBuy()){
+                        itemBuySell = "Buying for";
+                    } else {
+                        itemBuySell = "Selling for";
+                    }
                     Log.d(TAG,itemDescription +"\t" + itemPrice + "\t" + itemPhotoUrl);
                     Intent intent = new Intent(ServiceExchange.this,ServiceExchangeDetails.class);
                     Bundle extras = new Bundle();
@@ -190,6 +207,7 @@ public class ServiceExchange extends AppCompatActivity {
                     extras.putString("EXTRA_NAME", itemName);
                     extras.putString("EXTRA_DETAILS",itemDetailedInfo);
                     extras.putString("EXTRA_ITEM_KEY",itemKey);
+                    extras.putString("EXTRA_BUY_SELL",itemBuySell);
                     Log.d(TAG, itemKey);
 
                     intent.putExtras(extras);
