@@ -2,6 +2,7 @@ package cs701b.middshare;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ public class ServiceExchangeItemNoTime {
     private String photoUrl;
     private String name;
     private String details;
+    private ArrayList<Comment> comments;
     private long time;
 
 

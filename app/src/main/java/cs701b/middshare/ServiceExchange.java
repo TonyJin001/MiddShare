@@ -138,7 +138,7 @@ public class ServiceExchange extends AppCompatActivity {
 
             final ListView seList = (ListView) findViewById(R.id.service_list);
 
-            FirebaseListAdapter<ServiceExchangeItemNoTime> adapter = new FirebaseListAdapter<ServiceExchangeItemNoTime>(
+            final FirebaseListAdapter<ServiceExchangeItemNoTime> adapter = new FirebaseListAdapter<ServiceExchangeItemNoTime>(
                     this,
                     ServiceExchangeItemNoTime.class,
                     R.layout.list_item_service_exchange,
@@ -180,6 +180,7 @@ public class ServiceExchange extends AppCompatActivity {
                     String itemPhotoUrl = itemDetails.getPhotoUrl();
                     String itemName = itemDetails.getName();
                     String itemDetailedInfo = itemDetails.getDetails();
+                    String itemKey = adapter.getRef(position).getKey();
                     Log.d(TAG,itemDescription +"\t" + itemPrice + "\t" + itemPhotoUrl);
                     Intent intent = new Intent(ServiceExchange.this,ServiceExchangeDetails.class);
                     Bundle extras = new Bundle();
@@ -188,6 +189,9 @@ public class ServiceExchange extends AppCompatActivity {
                     extras.putString("EXTRA_PHOTOURL",itemPhotoUrl);
                     extras.putString("EXTRA_NAME", itemName);
                     extras.putString("EXTRA_DETAILS",itemDetailedInfo);
+                    extras.putString("EXTRA_ITEM_KEY",itemKey);
+                    Log.d(TAG, itemKey);
+
                     intent.putExtras(extras);
                     startActivity(intent);
                 }

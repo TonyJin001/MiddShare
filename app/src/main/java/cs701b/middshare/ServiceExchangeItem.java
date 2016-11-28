@@ -2,6 +2,7 @@ package cs701b.middshare;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ public class ServiceExchangeItem {
     private String name;
     private String details;
     private Map<String,String> time;
+    private ArrayList<Comment> comments;
 
     public ServiceExchangeItem() {
 
@@ -44,6 +46,7 @@ public class ServiceExchangeItem {
         result.put("name",name);
         result.put("details",details);
         result.put("time",time);
+        result.put("comments", comments);
         return result;
     }
 
@@ -94,4 +97,8 @@ public class ServiceExchangeItem {
     public void setTime(Map<String, String> time) {
         this.time = time;
     }
-}
+
+
+
+    }
+
