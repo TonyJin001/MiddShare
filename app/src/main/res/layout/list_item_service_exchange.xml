@@ -52,5 +52,14 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/currency"
+        android:textColor="#000000"
+        android:textSize="12sp"
+        android:layout_toLeftOf="@id/cost"
+        android:layout_alignTop="@id/cost"/>
+
 
 </RelativeLayout>

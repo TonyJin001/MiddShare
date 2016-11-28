@@ -77,9 +77,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 tools:text = "Details"
-                android:layout_alignBottom="@+id/user_photo_details"
-                android:layout_alignLeft="@+id/description_details"
-                android:layout_alignStart="@+id/description_details" />
+                android:layout_below="@id/description_details"
+                android:layout_alignLeft="@+id/description_details"/>
 
         </RelativeLayout>
 
