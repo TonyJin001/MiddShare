@@ -13,7 +13,7 @@
 
 
     <RadioGroup
-        android:id="@+id/radioGroup"
+        android:id="@+id/radio_group_buy_sell"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -26,13 +26,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/buy_boolean"
-            android:onClick="onRadioButtonClicked"
+            android:onClick="onBuySellRadioButtonClicked"
             android:layout_marginRight="30dp"/>
         <RadioButton android:id="@+id/sell_boolean"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sell_boolean"
-            android:onClick="onRadioButtonClicked"
+            android:onClick="onBuySellRadioButtonClicked"
             android:layout_marginLeft="30dp"/>
     </RadioGroup>
 
@@ -45,7 +45,7 @@
         android:inputType="text"
         android:layout_marginTop="40dp"
         android:layout_marginBottom="10dp"
-        android:layout_below="@+id/radioGroup"
+        android:layout_below="@+id/radio_group_buy_sell"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -74,14 +74,40 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <CheckBox
+
+    <RadioGroup
+        android:id="@+id/radio_group_time_limit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/enable_time_limit"
+        android:orientation="vertical"
         android:layout_below="@id/edit_message_extrainfo"
         android:layout_marginTop="10dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true">
+        <RadioButton android:id="@+id/rb_valid_until"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/valid_until"
+            android:onClick="onTimeLimitRadioButtonClicked" />
+        <RadioButton android:id="@+id/rb_valid_for"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/valid_for"
+            android:onClick="onTimeLimitRadioButtonClicked" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/until_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/radio_group_time_limit"
+        android:layout_alignTop="@id/radio_group_time_limit"
+        android:layout_marginTop="7dp"
+        android:layout_marginLeft="15dp" />
+
+
+
 
     <Button
         android:layout_width="wrap_content"
@@ -91,6 +117,44 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="62dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_valid_time"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:layout_marginTop="27dp"
+        android:layout_below="@+id/until_time"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="26dp"
+        android:layout_marginStart="26dp">
+        <EditText
+            android:id="@+id/valid_hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:inputType="number"
+            android:imeOptions="actionNext"/>
+        <TextView
+            android:id="@+id/hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hour"/>
+        <EditText
+            android:id="@+id/valid_minute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:inputType="number"
+            android:imeOptions="actionDone"/>
+        <TextView
+            android:id="@+id/minute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/minute"/>
+    </LinearLayout>
 
 
 </RelativeLayout>
