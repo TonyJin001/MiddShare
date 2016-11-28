@@ -1,12 +1,16 @@
 package cs701b.middshare;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,6 +28,7 @@ public class CreateNew extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private final String TAG = "Create_New";
+    private String buyOrSell = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +49,32 @@ public class CreateNew extends AppCompatActivity {
             final EditText editPrice = (EditText) findViewById(R.id.edit_message_cost);
             final EditText editExtra = (EditText) findViewById(R.id.edit_message_extrainfo);
             final Button seSubmit = (Button) findViewById(R.id.submit_new);
+
+            editPrice.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (b){
+                        if (editPrice.getText().toString().equals("")) {
+                            editPrice.setText(R.string.currency);
+                            editPrice.setSelection(editPrice.getText().length());
+                        }
+                        InputMethodManager keyboard = (InputMethodManager)
+                                getSystemService(Context.INPUT_METHOD_SERVICE);
+                        keyboard.showSoftInput(editPrice,0);
+                    }
+                }
+            });
+
             seSubmit.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
                     String key = mDatabase.child("items").push().getKey();
-                    ServiceExchangeItem newItem = new ServiceExchangeItem(editDescription.getText().toString(), editPrice.getText().toString(),
+                    String cost = editPrice.getText().toString();
+                    // Don't store the dollar sign or any preset currency sign
+                    if (cost.startsWith(getString(R.string.currency))){
+                        cost = cost.substring(1);
+                    }
+                    ServiceExchangeItem newItem = new ServiceExchangeItem(editDescription.getText().toString(), cost,
                             mFirebaseUser.getPhotoUrl().toString(),mFirebaseUser.getDisplayName(),editExtra.getText().toString(),ServerValue.TIMESTAMP);
                     Map<String, Object> newItemValues = newItem.toMap();
 
@@ -60,6 +86,9 @@ public class CreateNew extends AppCompatActivity {
                     editDescription.setText("");
                     editPrice.setText("");
                     editExtra.setText("");
+
+                    Toast.makeText(CreateNew.this, "" + buyOrSell, Toast.LENGTH_SHORT).show();
+
                     finish();
                 }
             });
@@ -74,13 +103,15 @@ public class CreateNew extends AppCompatActivity {
         // Check which radio button was clicked
         switch(view.getId()) {
             case R.id.buy_boolean:
-                if (checked)
-                    // Pirates are the best
+                if (checked) {
+                    buyOrSell = "buy";
                     break;
+                }
             case R.id.sell_boolean:
-                if (checked)
-                    // Ninjas rule
+                if (checked) {
+                    buyOrSell = "sell";
                     break;
+                }
         }
     }
     private void loadLoginView() {
