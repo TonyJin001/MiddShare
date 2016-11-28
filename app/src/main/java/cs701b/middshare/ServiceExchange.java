@@ -1,15 +1,19 @@
 package cs701b.middshare;
 
+import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,6 +47,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.R.attr.bitmap;
 import static java.lang.System.err;
 
 public class ServiceExchange extends AppCompatActivity {
@@ -54,11 +59,33 @@ public class ServiceExchange extends AppCompatActivity {
     private FirebaseUser mFirebaseUser;
     private final String TAG = "Service_Exchange";
     private Bitmap currentBitmap = null;
+    private LruCache<String,Bitmap> mMemoryCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_exchange);
+        // hasn't verified isRegistered... yet
+
+
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory()/1024);
+        final int cacheSize = maxMemory/8;
+
+        mMemoryCache = new LruCache<String,Bitmap> (cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                return bitmap.getByteCount()/1024;
+            }
+        };
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ServiceExchange.this,CreateNew.class);
+                startActivity(intent);
+            }
+        });
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -111,50 +138,67 @@ public class ServiceExchange extends AppCompatActivity {
 
             final ListView seList = (ListView) findViewById(R.id.service_list);
 
-            FirebaseListAdapter<ServiceExchangeItem> adapter = new FirebaseListAdapter<ServiceExchangeItem>(
+            final FirebaseListAdapter<ServiceExchangeItemNoTime> adapter = new FirebaseListAdapter<ServiceExchangeItemNoTime>(
                     this,
-                    ServiceExchangeItem.class,
+                    ServiceExchangeItemNoTime.class,
                     R.layout.list_item_service_exchange,
                     mDatabase.child("service_exchange_items")
             ) {
                 @Override
-                protected void populateView(View v, ServiceExchangeItem model, int position) {
+                protected void populateView(View v, ServiceExchangeItemNoTime model, int position) {
                     ImageView userPhoto = (ImageView) v.findViewById(R.id.user_photo);
                     TextView description = (TextView) v.findViewById(R.id.description);
                     TextView price = (TextView) v.findViewById(R.id.cost);
+                    TextView userName = (TextView) v.findViewById(R.id.user_name)
+                            ;
                     description.setText(model.getDescription());
+                    userName.setText(model.getName());
+
                     Log.d(TAG,model.getDescription()+"@"+model.getPrice());
                     price.setText(model.getPrice());
                     Log.d(TAG,"Photo url:" + model.getPhotoUrl());
-                    userPhoto.setImageURI(Uri.parse(model.getPhotoUrl()));
-                    new GetProfilePhoto(userPhoto).execute(model.getPhotoUrl());
+                    final Bitmap bitmap = getBitmapFromMemCache(model.getPhotoUrl());
+                    if (bitmap != null) {
+                        userPhoto.setImageBitmap(bitmap);
+                    } else {
+                        new GetProfilePhoto(userPhoto).execute(model.getPhotoUrl());
+                    }
+//                    userPhoto.setImageURI(Uri.parse(model.getPhotoUrl()));
+
 //                    // Photo profiles swap quickly, problem maybe with async task and global variable currentBitmap....
 //                    Log.d(TAG,"Current bitmap: " + currentBitmap);
 //                    userPhoto.setImageBitmap(currentBitmap);
                 }
             };
             seList.setAdapter(adapter);
+            seList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    ServiceExchangeItemNoTime itemDetails = (ServiceExchangeItemNoTime) parent.getAdapter().getItem(position);
+                    String itemDescription = itemDetails.getDescription();
+                    String itemPrice =  itemDetails.getPrice();
+                    String itemPhotoUrl = itemDetails.getPhotoUrl();
+                    String itemName = itemDetails.getName();
+                    String itemDetailedInfo = itemDetails.getDetails();
+                    String itemKey = adapter.getRef(position).getKey();
+                    Log.d(TAG,itemDescription +"\t" + itemPrice + "\t" + itemPhotoUrl);
+                    Intent intent = new Intent(ServiceExchange.this,ServiceExchangeDetails.class);
+                    Bundle extras = new Bundle();
+                    extras.putString("EXTRA_DESCRIPTION",itemDescription);
+                    extras.putString("EXTRA_PRICE",itemPrice);
+                    extras.putString("EXTRA_PHOTOURL",itemPhotoUrl);
+                    extras.putString("EXTRA_NAME", itemName);
+                    extras.putString("EXTRA_DETAILS",itemDetailedInfo);
+                    extras.putString("EXTRA_ITEM_KEY",itemKey);
+                    Log.d(TAG, itemKey);
 
-            final EditText editDescription = (EditText) findViewById(R.id.edit_description);
-            final EditText editPrice = (EditText) findViewById(R.id.edit_price);
-            final Button seSubmit = (Button) findViewById(R.id.se_submit);
-            seSubmit.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View v) {
-
-                    String key = mDatabase.child("items").push().getKey();
-                    ServiceExchangeItem newItem = new ServiceExchangeItem(editDescription.getText().toString(),editPrice.getText().toString(),
-                            mFirebaseUser.getPhotoUrl().toString());
-                    Map<String,Object> newItemValues = newItem.toMap();
-
-                    Map<String,Object> childUpdates = new HashMap<>();
-                    childUpdates.put("/service_exchange_items/" + key, newItemValues);
-                    childUpdates.put("/user-service_exchange_items/" + mUserId + "/" + key, newItemValues);
-
-                    mDatabase.updateChildren(childUpdates);
-                    editDescription.setText("");
-                    editPrice.setText("");
+                    intent.putExtras(extras);
+                    startActivity(intent);
                 }
             });
+
+            startService(new Intent(this,NotificationListener.class));
+
         }
     }
 
@@ -199,10 +243,22 @@ public class ServiceExchange extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if (getBitmapFromMemCache(key) == null) {
+            mMemoryCache.put(key,bitmap);
+        }
+    }
+
+    public Bitmap getBitmapFromMemCache(String key) {
+        return mMemoryCache.get(key);
+    }
+
+
     class GetProfilePhoto extends AsyncTask<String, Void, Bitmap> {
 
         private Exception exception;
         private ImageView bmImage;
+        private final String TAG = "Get Profile Photo";
 
         public GetProfilePhoto(ImageView bmImage) {
             this.bmImage = bmImage;
@@ -214,6 +270,7 @@ public class ServiceExchange extends AppCompatActivity {
                 try {
                     URL url = new URL(urlStr[0]);
                     bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    addBitmapToMemoryCache(urlStr[0],bitmap);
                 } catch (NullPointerException e) {
                     Log.e(TAG,"nullpointer when setting user image");
                 } catch (IOException e) {
@@ -230,6 +287,8 @@ public class ServiceExchange extends AppCompatActivity {
             bmImage.setImageBitmap(bitmap);
         }
     }
+
+
 
 
 }

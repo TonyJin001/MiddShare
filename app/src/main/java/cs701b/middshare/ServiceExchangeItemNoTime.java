@@ -10,20 +10,21 @@ import java.util.Map;
  * Created by asus1 on 2016/10/20.
  */
 
-public class ServiceExchangeItem {
+public class ServiceExchangeItemNoTime {
     private String description;
     private String price;
     private String photoUrl;
     private String name;
     private String details;
-    private Map<String,String> time;
     private ArrayList<Comment> comments;
+    private long time;
 
-    public ServiceExchangeItem() {
+
+    public ServiceExchangeItemNoTime() {
 
     }
 
-    public ServiceExchangeItem(String description, String price, String photoUrl, String name, String details, Map<String,String> time) {
+    public ServiceExchangeItemNoTime(String description, String price, String photoUrl, String name, String details, long time) {
         this.description = description;
         this.price = price;
         this.name = name;
@@ -38,17 +39,16 @@ public class ServiceExchangeItem {
         }
     }
 
-    public Map<String,Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("description", description);
-        result.put("price",price);
-        result.put("photoUrl",photoUrl);
-        result.put("name",name);
-        result.put("details",details);
-        result.put("time",time);
-        result.put("comments", comments);
-        return result;
-    }
+//    public Map<String,Object> toMap() {
+//        HashMap<String, Object> result = new HashMap<>();
+//        result.put("description", description);
+//        result.put("price",price);
+//        result.put("photoUrl",photoUrl);
+//        result.put("name",name);
+//        result.put("details",details);
+//        result.put("time",time);
+//        return result;
+//    }
 
     public String getDescription() {
         return description;
@@ -90,15 +90,11 @@ public class ServiceExchangeItem {
         this.details = details;
     }
 
-    public Map<String, String> getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(Map<String, String> time) {
+    public void setTime(long time) {
         this.time = time;
     }
-
-
-
-    }
-
+}

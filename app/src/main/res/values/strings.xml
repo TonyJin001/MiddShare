@@ -10,4 +10,12 @@
     <string name="log_out">Log Out</string>
     <string name="user_photo">User Photo</string>
     <string name="currency">$</string>
+    <string name="submit">Submit</string>
+    <string name="submit_new">Submit Request</string>
+    <string name="edit_message_request">Request Description</string>
+    <string name="edit_message_cost">Willingness to Pay or Receive</string>
+    <string name="edit_message_extrainfo">Additional Information</string>
+    <string name="sell_boolean">Sell</string>
+    <string name="buy_boolean">Buy</string>
+    <string name="enable_time_limit">Set a Time Limit</string>
 </resources>

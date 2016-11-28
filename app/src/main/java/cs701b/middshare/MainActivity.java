@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    // Init facebook login
     private void initFacebookLogin() {
         mCallbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         client.disconnect();
     }
 
+    // Exchange facebook taken with firebase in order to log into firebase
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessTOken:" + token);
 
@@ -161,9 +163,10 @@ public class MainActivity extends AppCompatActivity {
                 .build();
     }
 
-    /** Called when user clicks Log In Button */
+
+    // Start service exchange activity
     public void logIn(){
-        //does something in response to button
+        Log.d(TAG,"Starting service exchange activity");
         Intent intent = new Intent(MainActivity.this,ServiceExchange.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
