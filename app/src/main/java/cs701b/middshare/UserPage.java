@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -129,6 +130,19 @@ public class UserPage extends AppCompatActivity {
                 }
             };
             upList.setAdapter(adapter);
+            upList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    ServiceExchangeItemNoTime itemDetails = (ServiceExchangeItemNoTime) parent.getAdapter().getItem(position);
+                    DatabaseReference itemRef = adapter.getRef(position);
+                    String globalItemRefKey = adapter.getRef(position).getKey();
+                    DatabaseReference globalItemRef = (DatabaseReference) mDatabase.child("service_exchange_items/" + globalItemRefKey);
+                    Log.d(TAG, "position is " + itemRef.toString());
+                    itemRef.removeValue();
+                    globalItemRef.removeValue();
+                    return true;
+                }
+            });
         }
     }
 
