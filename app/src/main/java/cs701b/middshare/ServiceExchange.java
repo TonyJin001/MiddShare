@@ -27,6 +27,10 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -64,7 +68,12 @@ public class ServiceExchange extends AppCompatActivity {
     private FirebaseUser mFirebaseUser;
     private final String TAG = "Service_Exchange";
     private Bitmap currentBitmap = null;
-    private LruCache<String,Bitmap> mMemoryCache;
+    private LruCache<String, Bitmap> mMemoryCache;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +82,13 @@ public class ServiceExchange extends AppCompatActivity {
         // hasn't verified isRegistered... yet
 
 
-        final int maxMemory = (int) (Runtime.getRuntime().maxMemory()/1024);
-        final int cacheSize = maxMemory/8;
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        final int cacheSize = maxMemory / 8;
 
-        mMemoryCache = new LruCache<String,Bitmap> (cacheSize) {
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
             @Override
             protected int sizeOf(String key, Bitmap bitmap) {
-                return bitmap.getByteCount()/1024;
+                return bitmap.getByteCount() / 1024;
             }
         };
 
@@ -87,7 +96,7 @@ public class ServiceExchange extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ServiceExchange.this,CreateNew.class);
+                Intent intent = new Intent(ServiceExchange.this, CreateNew.class);
                 startActivity(intent);
             }
         });
@@ -114,20 +123,28 @@ public class ServiceExchange extends AppCompatActivity {
                 name = profile.getDisplayName();
             }
 
+            profilePictureView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ServiceExchange.this, UserPage.class);
+                    startActivity(intent);
+                }
+            });
+
             final String finalPhotoUrl = photoUrl;
 
             if (!mDatabase.child("users").child(mUserId).child("name").equals(mFirebaseUser.getDisplayName())) {
                 mDatabase.child("users").child(mUserId).child("name").setValue(mFirebaseUser.getDisplayName());
-                Log.d(TAG,"update name");
+                Log.d(TAG, "update name");
             }
-            if (!mDatabase.child("users").child(mUserId).child("email").equals(mFirebaseUser.getEmail())){
+            if (!mDatabase.child("users").child(mUserId).child("email").equals(mFirebaseUser.getEmail())) {
                 mDatabase.child("users").child(mUserId).child("email").setValue(mFirebaseUser.getEmail());
-                Log.d(TAG,"update email");
+                Log.d(TAG, "update email");
             }
-            if (!mDatabase.child("users").child(mUserId).child("photo").equals(photoUrl)){
+            if (!mDatabase.child("users").child(mUserId).child("photo").equals(photoUrl)) {
                 if (!photoUrl.equals(null)) {
                     mDatabase.child("users").child(mUserId).child("photo").setValue(photoUrl);
-                    Log.d(TAG,"update photo");
+                    Log.d(TAG, "update photo");
                 } else {
                     Log.d(TAG, "photo null");
                 }
@@ -161,7 +178,6 @@ public class ServiceExchange extends AppCompatActivity {
                     TextView price = (TextView) v.findViewById(R.id.cost);
                     TextView userName = (TextView) v.findViewById(R.id.user_name);
                     TextView buySell = (TextView) v.findViewById(R.id.buy_sell);
-
                     description.setText(model.getDescription());
                     userName.setText(model.getName());
                     if (model.isBuy()){
@@ -172,9 +188,9 @@ public class ServiceExchange extends AppCompatActivity {
                         buySell.setTextColor(Color.parseColor("#4CAF50"));
                     }
 
-                    Log.d(TAG,model.getDescription()+"@"+model.getPrice());
+                    Log.d(TAG, model.getDescription() + "@" + model.getPrice());
                     price.setText(model.getPrice());
-                    Log.d(TAG,"Photo url:" + model.getPhotoUrl());
+
                     final Bitmap bitmap = getBitmapFromMemCache(model.getPhotoUrl());
                     if (bitmap != null) {
                         userPhoto.setImageBitmap(bitmap);
@@ -189,12 +205,13 @@ public class ServiceExchange extends AppCompatActivity {
                 }
             };
             seList.setAdapter(adapter);
+
             seList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     ServiceExchangeItemNoTime itemDetails = (ServiceExchangeItemNoTime) parent.getAdapter().getItem(position);
                     String itemDescription = itemDetails.getDescription();
-                    String itemPrice =  itemDetails.getPrice();
+                    String itemPrice = itemDetails.getPrice();
                     String itemPhotoUrl = itemDetails.getPhotoUrl();
                     String itemName = itemDetails.getName();
                     String itemDetailedInfo = itemDetails.getDetails();
@@ -208,23 +225,43 @@ public class ServiceExchange extends AppCompatActivity {
                     Log.d(TAG,itemDescription +"\t" + itemPrice + "\t" + itemPhotoUrl);
                     Intent intent = new Intent(ServiceExchange.this,ServiceExchangeDetails.class);
                     Bundle extras = new Bundle();
-                    extras.putString("EXTRA_DESCRIPTION",itemDescription);
-                    extras.putString("EXTRA_PRICE",itemPrice);
-                    extras.putString("EXTRA_PHOTOURL",itemPhotoUrl);
+                    extras.putString("EXTRA_DESCRIPTION", itemDescription);
+                    extras.putString("EXTRA_PRICE", itemPrice);
+                    extras.putString("EXTRA_PHOTOURL", itemPhotoUrl);
                     extras.putString("EXTRA_NAME", itemName);
                     extras.putString("EXTRA_DETAILS",itemDetailedInfo);
                     extras.putString("EXTRA_ITEM_KEY",itemKey);
                     extras.putString("EXTRA_BUY_SELL",itemBuySell);
+
                     Log.d(TAG, itemKey);
 
                     intent.putExtras(extras);
                     startActivity(intent);
                 }
             });
+//            seList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//                @Override
+//                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                    ServiceExchangeItemNoTime itemDetails = (ServiceExchangeItemNoTime) parent.getAdapter().getItem(position);
+//                    DatabaseReference globalItemRef = adapter.getRef(position);
+//                    String itemRefKey = adapter.getRef(position).getKey();
+//                    DatabaseReference itemRef = (DatabaseReference) mDatabase.child("user-service_exchange_items/" + mUserId.toString() + "/" + itemRefKey);
+//                    Log.d(TAG, "position is " + itemRef.toString());
+//                    itemRef.removeValue();
+//                    globalItemRef.removeValue();
+//                    return true;
+//                }
+//            });
 
-            startService(new Intent(this,NotificationListener.class));
+
+
+
+            startService(new Intent(this, NotificationListener.class));
 
         }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private void updateProfile(String name, String email, Uri uri) {
@@ -237,7 +274,7 @@ public class ServiceExchange extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Log.d(TAG,"User profile updated");
+                    Log.d(TAG, "User profile updated");
                 }
             }
         });
@@ -246,15 +283,14 @@ public class ServiceExchange extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Log.d(TAG,"User email updated");
+                    Log.d(TAG, "User email updated");
                 }
             }
         });
     }
 
 
-
-    private void logOut (View view) {
+    private void logOut(View view) {
         mFirebaseAuth.signOut();
         FacebookSdk.sdkInitialize(getApplicationContext());
         LoginManager.getInstance().logOut();
@@ -270,12 +306,48 @@ public class ServiceExchange extends AppCompatActivity {
 
     public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
         if (getBitmapFromMemCache(key) == null) {
-            mMemoryCache.put(key,bitmap);
+            mMemoryCache.put(key, bitmap);
         }
     }
 
     public Bitmap getBitmapFromMemCache(String key) {
         return mMemoryCache.get(key);
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("ServiceExchange Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 
 
@@ -295,9 +367,9 @@ public class ServiceExchange extends AppCompatActivity {
                 try {
                     URL url = new URL(urlStr[0]);
                     bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    addBitmapToMemoryCache(urlStr[0],bitmap);
+                    addBitmapToMemoryCache(urlStr[0], bitmap);
                 } catch (NullPointerException e) {
-                    Log.e(TAG,"nullpointer when setting user image");
+                    Log.e(TAG, "nullpointer when setting user image");
                 } catch (IOException e) {
                     Log.e(TAG, "IO exception when setting user image");
                 }
@@ -312,8 +384,6 @@ public class ServiceExchange extends AppCompatActivity {
             bmImage.setImageBitmap(bitmap);
         }
     }
-
-
 
 
 }
