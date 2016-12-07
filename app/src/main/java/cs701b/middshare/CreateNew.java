@@ -113,18 +113,22 @@ public class CreateNew extends AppCompatActivity {
                     }
 
                     // If the user entered how long the request is valid for
-                    if (validFor.isChecked() && !(editValidHour.getText().toString().equals("")) && !(editValidMinute.getText().toString().equals(""))){
+                    if (validFor.isChecked() && (!(editValidHour.getText().toString().equals("")) || !(editValidMinute.getText().toString().equals("")))){
                         Calendar currentTime = Calendar.getInstance();
                         currentTime.setTime(new Date());
                         Log.d(TAG,"current time before adding hour"+currentTime.getTime());
-                        currentTime.add(Calendar.HOUR_OF_DAY,Integer.parseInt(editValidHour.getText().toString()));
-                        Log.d(TAG,"current time before adding minute"+currentTime.getTime());
-                        currentTime.add(Calendar.MINUTE,Integer.parseInt(editValidMinute.getText().toString()));
-                        Log.d(TAG,"current time final"+currentTime.getTime());
+                        if (!editValidHour.getText().toString().equals("")){
+                            currentTime.add(Calendar.HOUR_OF_DAY,Integer.parseInt(editValidHour.getText().toString()));
+                            Log.d(TAG,"current time before adding minute"+currentTime.getTime());
+                        }
+                        if (!editValidMinute.getText().toString().equals("")){
+                            currentTime.add(Calendar.MINUTE,Integer.parseInt(editValidMinute.getText().toString()));
+                            Log.d(TAG,"current time final"+currentTime.getTime());
+                        }
                         timeLimit = currentTime.getTimeInMillis();
                     }
 
-                    if (validFor.isChecked() && ((editValidHour.getText().toString().equals("")) || (editValidMinute.getText().toString().equals("")))) {
+                    if (validFor.isChecked() && ((editValidHour.getText().toString().equals("")) && (editValidMinute.getText().toString().equals("")))) {
                         timeLimit = -1;
                     }
 
