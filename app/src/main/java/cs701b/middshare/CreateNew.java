@@ -21,8 +21,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.facebook.login.widget.ProfilePictureView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
@@ -136,7 +138,11 @@ public class CreateNew extends AppCompatActivity {
                         timeLimit = -1;
                     }
 
-
+                    String photoUrl = "";
+                    for (UserInfo profile : mFirebaseUser.getProviderData()) {
+                        String uid = profile.getUid();
+                        photoUrl = "http://graph.facebook.com/" + uid + "/picture?type=large";
+                    }
 
 
                     Log.d(TAG,mFirebaseUser.getPhotoUrl().toString());

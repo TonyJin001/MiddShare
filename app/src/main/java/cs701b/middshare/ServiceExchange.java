@@ -43,6 +43,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -200,11 +201,15 @@ public class ServiceExchange extends AppCompatActivity {
                     Log.d(TAG, model.getDescription() + "@" + model.getPrice());
                     price.setText(model.getPrice());
 
+                    Log.d(TAG,model.getPhotoUrl());
                     final Bitmap bitmap = getBitmapFromMemCache(model.getPhotoUrl());
                     if (bitmap != null) {
+                        Log.d(TAG,"isnot null");
                         userPhoto.setImageBitmap(bitmap);
                     } else {
-                        new GetProfilePhoto(userPhoto).execute(model.getPhotoUrl());
+                        Log.d(TAG,"isnull");
+//                        new GetProfilePhoto(userPhoto).execute(model.getPhotoUrl());
+                        Picasso.with(ServiceExchange.this).load(model.getPhotoUrl()).into(userPhoto);
                     }
 //                    userPhoto.setImageURI(Uri.parse(model.getPhotoUrl()));
 
@@ -375,6 +380,7 @@ public class ServiceExchange extends AppCompatActivity {
                 Bitmap bitmap = null;
                 try {
                     URL url = new URL(urlStr[0]);
+                    Log.d(TAG,urlStr[0]);
                     bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                     addBitmapToMemoryCache(urlStr[0], bitmap);
                 } catch (NullPointerException e) {
