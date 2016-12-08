@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,7 +39,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class CreateNew extends AppCompatActivity {
+public class CreateNew extends BaseActivity {
 
     private DatabaseReference mDatabase;
     private String mUserId;
@@ -59,6 +60,8 @@ public class CreateNew extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -158,9 +161,6 @@ public class CreateNew extends AppCompatActivity {
                     editDescription.setText("");
                     editPrice.setText("");
                     editExtra.setText("");
-
-                    Toast.makeText(CreateNew.this, "buy: " + buy, Toast.LENGTH_SHORT).show();
-
                     finish();
                 }
             });
@@ -257,7 +257,7 @@ public class CreateNew extends AppCompatActivity {
 
 
 
-    private void loadLoginView() {
+    public void loadLoginView() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

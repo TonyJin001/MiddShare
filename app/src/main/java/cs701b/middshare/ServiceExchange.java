@@ -11,8 +11,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.LruCache;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -81,6 +85,8 @@ public class ServiceExchange extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_exchange);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         // hasn't verified isRegistered... yet
 
 
@@ -160,13 +166,13 @@ public class ServiceExchange extends AppCompatActivity {
                 }
             }
 
-            Button bLogOut = (Button) findViewById(R.id.logout_button);
-            bLogOut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    logOut(v);
-                }
-            });
+//            Button bLogOut = (Button) findViewById(R.id.logout_button);
+//            bLogOut.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    logOut(v);
+//                }
+//            });
 
             final ListView seList = (ListView) findViewById(R.id.service_list);
 
@@ -278,6 +284,26 @@ public class ServiceExchange extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.global_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_log_out:
+                logOut();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void updateProfile(String name, String email, Uri uri) {
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(name)
@@ -304,7 +330,7 @@ public class ServiceExchange extends AppCompatActivity {
     }
 
 
-    private void logOut(View view) {
+    private void logOut() {
         mFirebaseAuth.signOut();
         FacebookSdk.sdkInitialize(getApplicationContext());
         LoginManager.getInstance().logOut();
