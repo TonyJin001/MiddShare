@@ -121,20 +121,25 @@ public class ServiceExchange extends AppCompatActivity {
                 profilePictureView = (ProfilePictureView) findViewById(R.id.profile_pic);
                 profilePictureView.setProfileId(uid);
                 photoUrl = "http://graph.facebook.com/" + uid + "/picture?width=800&height=600";
+                Log.d(TAG,photoUrl);
                 email = profile.getEmail();
                 name = profile.getDisplayName();
             }
 
-            profilePictureView.setOnClickListener(new View.OnClickListener() {
+            View.OnClickListener goToUserPage = new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View view) {
                     Intent intent = new Intent(ServiceExchange.this, UserPage.class);
                     startActivity(intent);
                 }
-            });
+            };
+
+            profilePictureView.setOnClickListener(goToUserPage);
 
             userNameSelf = (TextView) findViewById(R.id.se_user_name);
             userNameSelf.setText(name);
+            userNameSelf.setOnClickListener(goToUserPage);
+
             final String finalPhotoUrl = photoUrl;
 
             if (!mDatabase.child("users").child(mUserId).child("name").equals(mFirebaseUser.getDisplayName())) {

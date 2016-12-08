@@ -68,7 +68,7 @@ public class UserPage extends AppCompatActivity {
 //                ll = (LinearLayout) findViewById(R.id.user_page_ll);
 //                profilePictureView = (ProfilePictureView) findViewById(R.id.user_page_profile_pic);
 //                profilePictureView.setProfileId(uid);
-//                photoUrl = "http://graph.facebook.com/" + uid + "/picture?width=800&height=600";
+                photoUrl = "http://graph.facebook.com/" + uid + "/picture?width=800&height=600";
                 email = profile.getEmail();
                 name = profile.getDisplayName();
             }

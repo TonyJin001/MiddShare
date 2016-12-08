@@ -136,6 +136,10 @@ public class CreateNew extends AppCompatActivity {
                         timeLimit = -1;
                     }
 
+
+
+
+                    Log.d(TAG,mFirebaseUser.getPhotoUrl().toString());
                     ServiceExchangeItem newItem = new ServiceExchangeItem(editDescription.getText().toString(), cost,
                             mFirebaseUser.getPhotoUrl().toString(),mFirebaseUser.getDisplayName(),editExtra.getText().toString(),ServerValue.TIMESTAMP, buy, timeLimit);
                     Map<String, Object> newItemValues = newItem.toMap();
