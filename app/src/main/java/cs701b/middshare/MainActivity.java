@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.app.AlertDialog;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;

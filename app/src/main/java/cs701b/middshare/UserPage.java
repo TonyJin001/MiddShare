@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.LruCache;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -149,7 +152,13 @@ public class UserPage extends AppCompatActivity {
 //                    userPhoto.setImageBitmap(currentBitmap);
                 }
             };
+
             upList.setAdapter(adapter);
+
+
+//            registerForContextMenu(upList);
+
+
             upList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -165,6 +174,29 @@ public class UserPage extends AppCompatActivity {
             });
         }
     }
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//        MenuInflater menuInflator = getMenuInflater();
+//        menuInflator.inflate(R.menu.delete_or_resolve, menu);
+//    };
+
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+//        switch (item.getItemId()) {
+//            case R.id.id_delete:
+//                deleteItem(info.id);
+//                return true;
+//            case R.id.id_resolve:
+//                deleteNote(info.id);
+//                return true;
+//            default:
+//                return super.onContextItemSelected(item);
+//        }
+//    }
+
+
 
     private void loadLoginView() {
         Intent intent = new Intent(this, MainActivity.class);
