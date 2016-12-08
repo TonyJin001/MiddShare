@@ -3,6 +3,7 @@ package cs701b.middshare;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.util.LruCache;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,7 +32,9 @@ public class UserPage extends AppCompatActivity {
     private String mUserId;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
 //    private ProfilePictureView profilePictureView;
+//    private LinearLayout ll;
     private Bitmap currentBitmap = null;
     private LruCache<String,Bitmap> mMemoryCache;
 
@@ -61,6 +65,7 @@ public class UserPage extends AppCompatActivity {
             String name = "";
             for (UserInfo profile : mFirebaseUser.getProviderData()) {
                 String uid = profile.getUid();
+//                ll = (LinearLayout) findViewById(R.id.user_page_ll);
 //                profilePictureView = (ProfilePictureView) findViewById(R.id.user_page_profile_pic);
 //                profilePictureView.setProfileId(uid);
 //                photoUrl = "http://graph.facebook.com/" + uid + "/picture?width=800&height=600";
@@ -94,6 +99,11 @@ public class UserPage extends AppCompatActivity {
 //                    logOut(v);
 //                }
 //            });
+            collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.user_page_toolbar_layout);
+            collapsingToolbarLayout.setTitle(name);
+            collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.collapsedappbar);
+            collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.expandedappbar);
+
 
             final ListView upList = (ListView) findViewById(R.id.user_page_service_list);
             upList.setNestedScrollingEnabled(true);

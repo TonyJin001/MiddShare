@@ -62,6 +62,7 @@ import static java.lang.System.err;
 public class ServiceExchange extends AppCompatActivity {
 
     private ProfilePictureView profilePictureView;
+    private TextView userNameSelf;
     private DatabaseReference mDatabase;
     private String mUserId;
     private FirebaseAuth mFirebaseAuth;
@@ -91,6 +92,7 @@ public class ServiceExchange extends AppCompatActivity {
                 return bitmap.getByteCount() / 1024;
             }
         };
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +133,8 @@ public class ServiceExchange extends AppCompatActivity {
                 }
             });
 
+            userNameSelf = (TextView) findViewById(R.id.se_user_name);
+            userNameSelf.setText(name);
             final String finalPhotoUrl = photoUrl;
 
             if (!mDatabase.child("users").child(mUserId).child("name").equals(mFirebaseUser.getDisplayName())) {
