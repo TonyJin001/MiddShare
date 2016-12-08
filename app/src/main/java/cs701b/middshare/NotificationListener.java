@@ -1,5 +1,6 @@
 package cs701b.middshare;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -100,12 +101,13 @@ public class NotificationListener extends Service {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.logo)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(user + " requests on MiddShare")
                 .setAutoCancel(true)
                 .setContentText(description)
                 .setSound(defaultSoundUri)
-                .setContentIntent(pendeningIntent);
+                .setContentIntent(pendeningIntent)
+                .setPriority(Notification.PRIORITY_HIGH);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0,notificationBuilder.build());

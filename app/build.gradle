@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "cs701b.middshare"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -35,6 +35,10 @@ dependencies {
     compile 'com.firebaseui:firebase-ui:0.6.1'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.google.android.gms:play-services-appindexing:9.6.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.google.android.gms:play-services-location:9.6.1'
+    compile 'com.google.android.gms:play-services:9.6.1'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

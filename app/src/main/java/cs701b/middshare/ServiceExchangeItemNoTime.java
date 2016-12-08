@@ -16,20 +16,23 @@ public class ServiceExchangeItemNoTime {
     private String photoUrl;
     private String name;
     private String details;
-    private ArrayList<Comment> comments;
     private long time;
+    private boolean buy;
+    private long timeLimit;
 
 
     public ServiceExchangeItemNoTime() {
 
     }
 
-    public ServiceExchangeItemNoTime(String description, String price, String photoUrl, String name, String details, long time) {
+    public ServiceExchangeItemNoTime(String description, String price, String photoUrl, String name, String details, long time, boolean buy, long timeLimit) {
         this.description = description;
         this.price = price;
         this.name = name;
         this.details = details;
         this.time = time;
+        this.buy = buy;
+        this.timeLimit = timeLimit;
         if (photoUrl.equals(null)) {
             this.photoUrl = "";
             Log.d("SEItem","url is null");
@@ -96,5 +99,21 @@ public class ServiceExchangeItemNoTime {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public boolean isBuy() {
+        return buy;
+    }
+
+    public void setBuy(boolean buy) {
+        this.buy = buy;
+    }
+
+    public long getTimeLimit() {
+        return timeLimit;
+    }
+
+    public void setTimeLimit(long timeLimit) {
+        this.timeLimit = timeLimit;
     }
 }

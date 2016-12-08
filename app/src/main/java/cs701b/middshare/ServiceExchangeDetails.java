@@ -1,13 +1,17 @@
 package cs701b.middshare;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,13 +34,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ServiceExchangeDetails extends AppCompatActivity {
+public class ServiceExchangeDetails extends BaseActivity {
 
     private ImageView userPhoto;
     private TextView description;
     private TextView price;
     private TextView name;
     private TextView details;
+    private TextView buySellDetails;
     private String itemKey;
     private ListView comments;
     private EditText writeComment;
@@ -60,6 +65,8 @@ public class ServiceExchangeDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_exchange_details);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory()/1024);
         final int cacheSize = maxMemory/8;
@@ -102,6 +109,11 @@ public class ServiceExchangeDetails extends AppCompatActivity {
 
                          mDatabase.updateChildren(childUpdates);
                          writeComment.setText("");
+                        View thisView = getCurrentFocus();
+                        if (thisView != null) {
+                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        }
 
                      }
                  });
@@ -150,6 +162,7 @@ public class ServiceExchangeDetails extends AppCompatActivity {
         price = (TextView) itemInfoRL.findViewById(R.id.cost_details);
         name = (TextView) itemInfoRL.findViewById(R.id.name_details);
         details = (TextView) itemInfoRL.findViewById(R.id.details_details);
+        buySellDetails = (TextView) itemInfoRL.findViewById(R.id.buy_sell);
 
 
         comments = (ListView) outsideLL.findViewById(R.id.comments);
@@ -163,6 +176,12 @@ public class ServiceExchangeDetails extends AppCompatActivity {
         price.setText(extras.getString("EXTRA_PRICE"));
         name.setText(extras.getString("EXTRA_NAME"));
         details.setText(extras.getString("EXTRA_DETAILS"));
+        buySellDetails.setText(extras.getString("EXTRA_BUY_SELL"));
+        if (buySellDetails.getText().toString().equals("Buying for")){
+            buySellDetails.setTextColor(Color.parseColor("#E91E63"));
+        } else {
+            buySellDetails.setTextColor(Color.parseColor("#4CAF50"));
+        }
         //this needs to be fixed (itemKey)
 
         itemKey = extras.getString("EXTRA_ITEM_KEY");
@@ -177,12 +196,12 @@ public class ServiceExchangeDetails extends AppCompatActivity {
         loadLoginView();
     }
 
-    private void loadLoginView() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-    }
+//    public void loadLoginView() {
+//        Intent intent = new Intent(this, MainActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        startActivity(intent);
+//    }
 
     public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
         if (getBitmapFromMemCache(key) == null) {
