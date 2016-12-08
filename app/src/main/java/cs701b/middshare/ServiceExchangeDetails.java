@@ -1,5 +1,6 @@
 package cs701b.middshare;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -107,6 +109,11 @@ public class ServiceExchangeDetails extends BaseActivity {
 
                          mDatabase.updateChildren(childUpdates);
                          writeComment.setText("");
+                        View thisView = getCurrentFocus();
+                        if (thisView != null) {
+                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        }
 
                      }
                  });
