@@ -8,6 +8,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="facebook_app_id">544054199118059</string>
     <string name="log_out">Log Out</string>
+    <string name="sort_time">Sort</string>
     <string name="user_photo">User Photo</string>
     <string name="currency">$</string>
     <string name="submit">Submit</string>

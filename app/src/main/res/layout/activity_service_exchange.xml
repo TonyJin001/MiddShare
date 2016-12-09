@@ -42,13 +42,14 @@
         android:paddingLeft="16dp"/>
 
 
-    <!--<Button-->
-        <!--android:id="@+id/logout_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/log_out"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_marginRight="16dp"/>-->
+    <Button
+        android:id="@+id/sort_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sort_time"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/profile_pic"
+        android:layout_marginRight="16dp"/>
 
 
 

@@ -77,6 +77,7 @@ public class ServiceExchange extends AppCompatActivity {
 
     private ProfilePictureView profilePictureView;
     private TextView userNameSelf;
+    private Button sort;
     private DatabaseReference mDatabase;
     private String mUserId;
     private FirebaseAuth mFirebaseAuth;
@@ -157,6 +158,8 @@ public class ServiceExchange extends AppCompatActivity {
             userNameSelf.setText(name);
             userNameSelf.setOnClickListener(goToUserPage);
 
+            sort = (Button) findViewById(R.id.sort_button);
+
             final String finalPhotoUrl = photoUrl;
 
             if (!mDatabase.child("users").child(mUserId).child("name").equals(mFirebaseUser.getDisplayName())) {
@@ -234,6 +237,63 @@ public class ServiceExchange extends AppCompatActivity {
 //                    userPhoto.setImageBitmap(currentBitmap);
                 }
             };
+
+            final FirebaseListAdapterSortFilter<ServiceExchangeItemNoTime> reverseAdapter = new FirebaseListAdapterSortFilter<ServiceExchangeItemNoTime>(
+                    this,
+                    ServiceExchangeItemNoTime.class,
+                    R.layout.list_item_service_exchange,
+                    mDatabase.child("service_exchange_items")
+            ) {
+                @Override
+                protected void populateView(View v, ServiceExchangeItemNoTime model, int position) {
+                    DatabaseReference ref = this.getRef(position);
+                    if (model.getTimeLimit() < Calendar.getInstance().getTimeInMillis() && model.getTimeLimit() != -1) {
+                        Log.v(TAG, "Time limit passed");
+                        ref.removeValue();
+                    }
+                    ImageView userPhoto = (ImageView) v.findViewById(R.id.user_photo);
+                    TextView description = (TextView) v.findViewById(R.id.description);
+                    TextView price = (TextView) v.findViewById(R.id.cost);
+                    TextView userName = (TextView) v.findViewById(R.id.user_name);
+                    TextView buySell = (TextView) v.findViewById(R.id.buy_sell);
+                    description.setText(model.getDescription());
+                    userName.setText(model.getName());
+                    if (model.isBuy()) {
+                        buySell.setText("Buying for");
+                        buySell.setTextColor(Color.parseColor("#E91E63"));
+                    } else {
+                        buySell.setText("Selling for");
+                        buySell.setTextColor(Color.parseColor("#4CAF50"));
+                    }
+
+                    Log.d(TAG, model.getDescription() + "@" + model.getPrice());
+                    price.setText(model.getPrice());
+
+                    Log.d(TAG,model.getPhotoUrl());
+                    final Bitmap bitmap = getBitmapFromMemCache(model.getPhotoUrl());
+                    if (bitmap != null) {
+                        Log.d(TAG,"isnot null");
+                        userPhoto.setImageBitmap(bitmap);
+                    } else {
+                        Log.d(TAG,"isnull");
+//                        new GetProfilePhoto(userPhoto).execute(model.getPhotoUrl());
+                        Picasso.with(ServiceExchange.this).load(model.getPhotoUrl()).into(userPhoto);
+                    }
+//                    userPhoto.setImageURI(Uri.parse(model.getPhotoUrl()));
+
+//                    // Photo profiles swap quickly, problem maybe with async task and global variable currentBitmap....
+//                    Log.d(TAG,"Current bitmap: " + currentBitmap);
+//                    userPhoto.setImageBitmap(currentBitmap);
+                }
+            };
+
+            sort.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    seList.setAdapter(reverseAdapter);
+                }
+            });
+
             seList.setAdapter(adapter);
 
             seList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
