@@ -162,6 +162,23 @@ public abstract class FirebaseListAdapterSortFilter<T> extends FirebaseListAdapt
         return view;
     }
 
+    @Override
+    public DatabaseReference getRef(int position) {
+        if (sortingMethod.equals("NF")) {
+            return super.getRef(getCount() - (position+1));
+        } else if (sortingMethod.equals("OF")) {
+            return super.getRef(position);
+        }
+        if (!positionMap.isEmpty()) {
+            Log.d(TAG,positionMap.toString());
+            return super.getRef(positionMap.get(position));
+        } else {
+            Log.d(TAG,"PositionMap is empty");
+            return super.getRef(position);
+        }
+
+    }
+
     public String getSortingMethod() {
         return sortingMethod;
     }
@@ -169,6 +186,7 @@ public abstract class FirebaseListAdapterSortFilter<T> extends FirebaseListAdapt
     public void setSortingMethod(String sortingMethod) {
         this.sortingMethod = sortingMethod;
     }
+
 }
 class UnsafeCastUtil {
 

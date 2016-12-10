@@ -201,10 +201,13 @@ public class ServiceExchange extends AppCompatActivity {
                 @Override
                 protected void populateView(View v, ServiceExchangeItemNoTime model, int position) {
                     DatabaseReference ref = this.getRef(position);
-                    if (model.getTimeLimit() < Calendar.getInstance().getTimeInMillis() && model.getTimeLimit() != -1) {
-                        Log.v(TAG, "Time limit passed");
-                        ref.removeValue();
+                    if (ref != null){
+                        if (model.getTimeLimit() < Calendar.getInstance().getTimeInMillis() && model.getTimeLimit() != -1) {
+                            Log.v(TAG, "Time limit passed");
+                            ref.removeValue();
+                        }
                     }
+
                     ImageView userPhoto = (ImageView) v.findViewById(R.id.user_photo);
                     TextView description = (TextView) v.findViewById(R.id.description);
                     TextView price = (TextView) v.findViewById(R.id.cost);
@@ -250,9 +253,11 @@ public class ServiceExchange extends AppCompatActivity {
                 @Override
                 protected void populateView(View v, ServiceExchangeItemNoTime model, int position) {
                     DatabaseReference ref = this.getRef(position);
-                    if (model.getTimeLimit() < Calendar.getInstance().getTimeInMillis() && model.getTimeLimit() != -1) {
-                        Log.v(TAG, "Time limit passed");
-                        ref.removeValue();
+                    if (ref != null){
+                        if (model.getTimeLimit() < Calendar.getInstance().getTimeInMillis() && model.getTimeLimit() != -1) {
+                            Log.v(TAG, "Time limit passed");
+                            ref.removeValue();
+                        }
                     }
                     ImageView userPhoto = (ImageView) v.findViewById(R.id.user_photo);
                     TextView description = (TextView) v.findViewById(R.id.description);
