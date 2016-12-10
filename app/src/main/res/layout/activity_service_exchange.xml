@@ -42,14 +42,26 @@
         android:paddingLeft="16dp"/>
 
 
-    <Button
-        android:id="@+id/sort_button"
+    <!--<Button-->
+        <!--android:id="@+id/sort_button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/sort_time"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignTop="@id/profile_pic"-->
+        <!--android:layout_marginRight="16dp"/>-->
+
+    <Spinner
+        android:id="@+id/select_sort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sort_time"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/profile_pic"
-        android:layout_marginRight="16dp"/>
+        android:layout_below="@id/se_user_name"
+        android:layout_alignLeft="@id/se_user_name"
+        android:layout_marginTop="4dp"
+        android:paddingLeft="8dp"
+        android:entries="@array/sort_methods"
+        android:prompt="@string/sort">
+    </Spinner>
 
 
 

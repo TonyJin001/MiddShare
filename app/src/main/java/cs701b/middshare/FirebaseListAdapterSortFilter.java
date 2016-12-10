@@ -12,6 +12,7 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,9 @@ import java.util.Map;
 
 public abstract class FirebaseListAdapterSortFilter<T> extends FirebaseListAdapter<T> {
     private String TAG = "FirebaseListSortFilter";
+    private String sortingMethod = "OF";
+    private HashMap<Integer,Integer> positionMap = new HashMap<>();
+
     public FirebaseListAdapterSortFilter(Activity activity, Class<T> modelClass, int modelLayout, Query ref) {
         super(activity, modelClass, modelLayout, ref);
     }
@@ -29,12 +33,15 @@ public abstract class FirebaseListAdapterSortFilter<T> extends FirebaseListAdapt
         super(activity, modelClass, modelLayout, ref);
     }
 
-//    @Override
-//    public T getItem(int position) {
-//        Log.d(TAG, "position: " + position);
-//        Log.d(TAG,"count: " + getCount());
-//        return super.getItem(getCount() - (position + 1));
-//    }
+    @Override
+    public T getItem(int position) {
+        if (sortingMethod.equals("NF")){
+            position = getCount() - (position+1);
+        } else if (sortingMethod.equals("AZ")||sortingMethod.equals("ZA")||sortingMethod.equals("BF")||sortingMethod.equals("SF")) {
+            position = positionMap.get(position);
+        }
+        return super.getItem(position);
+    }
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
@@ -42,41 +49,113 @@ public abstract class FirebaseListAdapterSortFilter<T> extends FirebaseListAdapt
             view = mActivity.getLayoutInflater().inflate(mLayout, viewGroup, false);
         }
 
-        LinkedHashMap<String,ServiceExchangeItemNoTime> nameToItem = new LinkedHashMap();
+        if (sortingMethod.equals("AZ")||sortingMethod.equals("ZA")) {
+            LinkedHashMap<String,ServiceExchangeItemNoTime> nameToItem = new LinkedHashMap();
+            int nItems = getCount();
 
-        int nItems = getCount();
-        // maybe this getCount can be modified??????? to get the count of total items instead of the visible ones...???
-        for (int i=0; i<nItems; i++){
-            ServiceExchangeItemNoTime tempModel = UnsafeCastUtil.cast(getItem(i));
-            nameToItem.put(tempModel.getName(),tempModel);
-        }
-
-        List<Map.Entry<String, ServiceExchangeItemNoTime>> entries =
-                new ArrayList<Map.Entry<String, ServiceExchangeItemNoTime>>(nameToItem.entrySet());
-        Collections.sort(entries, new Comparator<Map.Entry<String, ServiceExchangeItemNoTime>>() {
-            public int compare(Map.Entry<String, ServiceExchangeItemNoTime> a, Map.Entry<String, ServiceExchangeItemNoTime> b){
-                return a.getKey().compareTo(b.getKey());
+            for (int i=0; i<nItems; i++){
+                ServiceExchangeItemNoTime tempModel = UnsafeCastUtil.cast(getItem(i));
+                nameToItem.put(tempModel.getName()+tempModel.getTime(),tempModel);
             }
-        });
-        ArrayList<ServiceExchangeItemNoTime> sortedItems = new ArrayList<>();
-        Map<String, ServiceExchangeItemNoTime> sortedMap = new LinkedHashMap<String, ServiceExchangeItemNoTime>();
-        for (Map.Entry<String, ServiceExchangeItemNoTime> entry : entries) {
-            sortedMap.put(entry.getKey(), entry.getValue());
-            sortedItems.add(entry.getValue());
-        }
 
-//        String keyName = sortedItems.get(position).getName();
-        // Call out to subclass to marshall this model into the provided view
-        try{
-            Log.d(TAG,sortedItems.size()+" size of sortedItems");
-            Log.d(TAG,position + " position");
-            populateView(view, (T) sortedItems.get(position), position);
-            // sortedItems list size is always 3....
-        } catch (IndexOutOfBoundsException e){
-            Log.e(TAG,"IndexOutOfBound");
+            List<Map.Entry<String, ServiceExchangeItemNoTime>> entries =
+                    new ArrayList<Map.Entry<String, ServiceExchangeItemNoTime>>(nameToItem.entrySet());
+
+            if (sortingMethod.equals("AZ")){
+                Collections.sort(entries, new Comparator<Map.Entry<String, ServiceExchangeItemNoTime>>() {
+                    public int compare(Map.Entry<String, ServiceExchangeItemNoTime> a, Map.Entry<String, ServiceExchangeItemNoTime> b){
+                        return a.getKey().compareTo(b.getKey());
+                    }
+                });
+            } else {
+                Collections.sort(entries, new Comparator<Map.Entry<String, ServiceExchangeItemNoTime>>() {
+                    public int compare(Map.Entry<String, ServiceExchangeItemNoTime> a, Map.Entry<String, ServiceExchangeItemNoTime> b){
+                        return a.getKey().compareTo(b.getKey())*-1;
+                    }
+                });
+            }
+
+            ArrayList<ServiceExchangeItemNoTime> sortedItems = new ArrayList<>();
+            Map<String, ServiceExchangeItemNoTime> sortedMap = new LinkedHashMap<String, ServiceExchangeItemNoTime>();
+            for (Map.Entry<String, ServiceExchangeItemNoTime> entry : entries) {
+                sortedMap.put(entry.getKey(), entry.getValue());
+                sortedItems.add(entry.getValue());
+            }
+
+            for (int i=0; i<nItems; i++) {
+                ServiceExchangeItemNoTime tempModel = UnsafeCastUtil.cast(getItem(i));
+                int newPosition = sortedItems.indexOf(tempModel);
+                positionMap.put(i,newPosition);
+            }
+
+            try{
+                Log.d(TAG,sortedItems.size()+" size of sortedItems");
+                Log.d(TAG,position + " position");
+                populateView(view, (T) sortedItems.get(position), position);
+            } catch (IndexOutOfBoundsException e){
+                Log.e(TAG,"IndexOutOfBound");
+            }
+        } else if (sortingMethod.equals("NF") || sortingMethod.equals("OF")){
+            populateView(view, getItem(position), position);
+        } else {
+            LinkedHashMap<String,ServiceExchangeItemNoTime> buySellToItem = new LinkedHashMap();
+            int nItems = getCount();
+
+            for (int i=0; i<nItems; i++){
+                ServiceExchangeItemNoTime tempModel = UnsafeCastUtil.cast(getItem(i));
+                Log.d(TAG,tempModel.isBuy()+"");
+                buySellToItem.put(tempModel.isBuy()+""+tempModel.getTime(),tempModel);
+            }
+
+            List<Map.Entry<String, ServiceExchangeItemNoTime>> entries =
+                    new ArrayList<Map.Entry<String, ServiceExchangeItemNoTime>>(buySellToItem.entrySet());
+
+            if (sortingMethod.equals("Sai" +
+                    "F")){
+                Collections.sort(entries, new Comparator<Map.Entry<String, ServiceExchangeItemNoTime>>() {
+                    public int compare(Map.Entry<String, ServiceExchangeItemNoTime> a, Map.Entry<String, ServiceExchangeItemNoTime> b){
+                        return a.getKey().compareTo(b.getKey());
+                    }
+                });
+            } else {
+                Collections.sort(entries, new Comparator<Map.Entry<String, ServiceExchangeItemNoTime>>() {
+                    public int compare(Map.Entry<String, ServiceExchangeItemNoTime> a, Map.Entry<String, ServiceExchangeItemNoTime> b){
+                        return a.getKey().compareTo(b.getKey())*-1;
+                    }
+                });
+            }
+
+            ArrayList<ServiceExchangeItemNoTime> sortedItems = new ArrayList<>();
+            Map<String, ServiceExchangeItemNoTime> sortedMap = new LinkedHashMap<String, ServiceExchangeItemNoTime>();
+            for (Map.Entry<String, ServiceExchangeItemNoTime> entry : entries) {
+                sortedMap.put(entry.getKey(), entry.getValue());
+                sortedItems.add(entry.getValue());
+            }
+
+            for (int i=0; i<nItems; i++) {
+                ServiceExchangeItemNoTime tempModel = UnsafeCastUtil.cast(getItem(i));
+                int newPosition = sortedItems.indexOf(tempModel);
+                positionMap.put(i,newPosition);
+            }
+
+            try{
+                Log.d(TAG,sortedItems.size()+" size of sortedItems");
+                Log.d(TAG,position + " position");
+                populateView(view, (T) sortedItems.get(position), position);
+            } catch (IndexOutOfBoundsException e){
+                Log.e(TAG,"IndexOutOfBound");
+            }
         }
 
         return view;
+    }
+
+    public String getSortingMethod() {
+        return sortingMethod;
+    }
+
+    public void setSortingMethod(String sortingMethod) {
+        this.sortingMethod = sortingMethod;
     }
 }
 class UnsafeCastUtil {

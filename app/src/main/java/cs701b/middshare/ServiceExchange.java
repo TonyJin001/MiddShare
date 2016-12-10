@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,7 +78,7 @@ public class ServiceExchange extends AppCompatActivity {
 
     private ProfilePictureView profilePictureView;
     private TextView userNameSelf;
-    private Button sort;
+    private Spinner sort;
     private DatabaseReference mDatabase;
     private String mUserId;
     private FirebaseAuth mFirebaseAuth;
@@ -158,7 +159,9 @@ public class ServiceExchange extends AppCompatActivity {
             userNameSelf.setText(name);
             userNameSelf.setOnClickListener(goToUserPage);
 
-            sort = (Button) findViewById(R.id.sort_button);
+
+
+            sort = (Spinner) findViewById(R.id.select_sort);
 
             final String finalPhotoUrl = photoUrl;
 
@@ -238,7 +241,7 @@ public class ServiceExchange extends AppCompatActivity {
                 }
             };
 
-            final FirebaseListAdapterSortFilter<ServiceExchangeItemNoTime> reverseAdapter = new FirebaseListAdapterSortFilter<ServiceExchangeItemNoTime>(
+            final FirebaseListAdapterSortFilter<ServiceExchangeItemNoTime> customAdapter = new FirebaseListAdapterSortFilter<ServiceExchangeItemNoTime>(
                     this,
                     ServiceExchangeItemNoTime.class,
                     R.layout.list_item_service_exchange,
@@ -287,14 +290,59 @@ public class ServiceExchange extends AppCompatActivity {
                 }
             };
 
-            sort.setOnClickListener(new View.OnClickListener() {
+//            sort.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    seList.setAdapter(reverseAdapter);
+//                }
+//            });
+
+            seList.setAdapter(customAdapter);
+
+            sort.setPrompt(getString(R.string.sort));
+            sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
-                public void onClick(View v) {
-                    seList.setAdapter(reverseAdapter);
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    String itemSelected = adapterView.getItemAtPosition(i).toString();
+                    switch (itemSelected){
+                        case("Newest First"): {
+                            customAdapter.setSortingMethod("NF");
+                            seList.setAdapter(customAdapter);
+                            break;
+                        }
+                        case("Oldest First"): {
+                            customAdapter.setSortingMethod("OF");
+                            seList.setAdapter(customAdapter);
+                            break;
+                        }
+                        case("Username A-Z"): {
+                            customAdapter.setSortingMethod("AZ");
+                            seList.setAdapter(customAdapter);
+                            break;
+                        }
+                        case("Username Z-A"): {
+                            customAdapter.setSortingMethod("ZA");
+                            seList.setAdapter(customAdapter);
+                            break;
+                        }
+                        case("Buy First"): {
+                            customAdapter.setSortingMethod("BF");
+                            seList.setAdapter(customAdapter);
+                            break;
+                        }
+                        case("Sell First"): {
+                            customAdapter.setSortingMethod("SF");
+                            seList.setAdapter(customAdapter);
+                            break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
                 }
             });
-
-            seList.setAdapter(adapter);
 
             seList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
