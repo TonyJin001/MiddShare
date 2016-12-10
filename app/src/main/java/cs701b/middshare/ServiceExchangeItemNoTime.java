@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by asus1 on 2016/10/20.
@@ -116,4 +117,29 @@ public class ServiceExchangeItemNoTime {
     public void setTimeLimit(long timeLimit) {
         this.timeLimit = timeLimit;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getName(),this.getTime(),this.getDescription(),this.getPrice(),this.getDetails());
+    }
+
+    @Override
+    public boolean equals (Object object) {
+        boolean result = false;
+        if (object == null || object.getClass() != getClass()) {
+            result = false;
+        } else {
+            ServiceExchangeItemNoTime other = (ServiceExchangeItemNoTime) object;
+            if (this.name.equals(other.getName())
+                    && this.getTime() == other.getTime()
+                    && this.getDescription().equals(other.getDescription())
+                    && this.getPrice().equals(other.getPrice())
+                    && this.getDetails().equals(other.getDetails())) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+
 }

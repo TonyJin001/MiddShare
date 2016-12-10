@@ -37,11 +37,21 @@ public abstract class FirebaseListAdapterSortFilter<T> extends FirebaseListAdapt
     public T getItem(int position) {
         if (sortingMethod.equals("NF")){
             position = getCount() - (position+1);
+        }
+        return super.getItem(position);
+    }
+
+    public T getItem(int position, boolean bar) {
+        Log.d(TAG,"Original position: " + position);
+        Log.d(TAG, positionMap.toString());
+        if (sortingMethod.equals("NF")){
+            position = getCount() - (position+1);
         } else if (sortingMethod.equals("AZ")||sortingMethod.equals("ZA")||sortingMethod.equals("BF")||sortingMethod.equals("SF")) {
             position = positionMap.get(position);
         }
         return super.getItem(position);
     }
+
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
@@ -82,10 +92,14 @@ public abstract class FirebaseListAdapterSortFilter<T> extends FirebaseListAdapt
                 sortedItems.add(entry.getValue());
             }
 
+            for (ServiceExchangeItemNoTime a : sortedItems) {
+                Log.d(TAG,a.getName() + " " + a.getDescription());
+            }
+
             for (int i=0; i<nItems; i++) {
                 ServiceExchangeItemNoTime tempModel = UnsafeCastUtil.cast(getItem(i));
                 int newPosition = sortedItems.indexOf(tempModel);
-                positionMap.put(i,newPosition);
+                positionMap.put(newPosition,i);
             }
 
             try{
@@ -110,8 +124,7 @@ public abstract class FirebaseListAdapterSortFilter<T> extends FirebaseListAdapt
             List<Map.Entry<String, ServiceExchangeItemNoTime>> entries =
                     new ArrayList<Map.Entry<String, ServiceExchangeItemNoTime>>(buySellToItem.entrySet());
 
-            if (sortingMethod.equals("Sai" +
-                    "F")){
+            if (sortingMethod.equals("SF")){
                 Collections.sort(entries, new Comparator<Map.Entry<String, ServiceExchangeItemNoTime>>() {
                     public int compare(Map.Entry<String, ServiceExchangeItemNoTime> a, Map.Entry<String, ServiceExchangeItemNoTime> b){
                         return a.getKey().compareTo(b.getKey());
@@ -131,11 +144,10 @@ public abstract class FirebaseListAdapterSortFilter<T> extends FirebaseListAdapt
                 sortedMap.put(entry.getKey(), entry.getValue());
                 sortedItems.add(entry.getValue());
             }
-
             for (int i=0; i<nItems; i++) {
                 ServiceExchangeItemNoTime tempModel = UnsafeCastUtil.cast(getItem(i));
                 int newPosition = sortedItems.indexOf(tempModel);
-                positionMap.put(i,newPosition);
+                positionMap.put(newPosition,i);
             }
 
             try{

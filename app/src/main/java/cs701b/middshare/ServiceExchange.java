@@ -140,7 +140,7 @@ public class ServiceExchange extends AppCompatActivity {
                 profilePictureView = (ProfilePictureView) findViewById(R.id.profile_pic);
                 profilePictureView.setProfileId(uid);
                 photoUrl = "http://graph.facebook.com/" + uid + "/picture?width=800&height=600";
-                Log.d(TAG,photoUrl);
+//                Log.d(TAG,photoUrl);
                 email = profile.getEmail();
                 name = profile.getDisplayName();
             }
@@ -220,16 +220,16 @@ public class ServiceExchange extends AppCompatActivity {
                         buySell.setTextColor(Color.parseColor("#4CAF50"));
                     }
 
-                    Log.d(TAG, model.getDescription() + "@" + model.getPrice());
+//                    Log.d(TAG, model.getDescription() + "@" + model.getPrice());
                     price.setText(model.getPrice());
 
                     Log.d(TAG,model.getPhotoUrl());
                     final Bitmap bitmap = getBitmapFromMemCache(model.getPhotoUrl());
                     if (bitmap != null) {
-                        Log.d(TAG,"isnot null");
+//                        Log.d(TAG,"isnot null");
                         userPhoto.setImageBitmap(bitmap);
                     } else {
-                        Log.d(TAG,"isnull");
+//                        Log.d(TAG,"isnull");
 //                        new GetProfilePhoto(userPhoto).execute(model.getPhotoUrl());
                         Picasso.with(ServiceExchange.this).load(model.getPhotoUrl()).into(userPhoto);
                     }
@@ -269,16 +269,16 @@ public class ServiceExchange extends AppCompatActivity {
                         buySell.setTextColor(Color.parseColor("#4CAF50"));
                     }
 
-                    Log.d(TAG, model.getDescription() + "@" + model.getPrice());
+//                    Log.d(TAG, model.getDescription() + "@" + model.getPrice());
                     price.setText(model.getPrice());
 
-                    Log.d(TAG,model.getPhotoUrl());
+//                    Log.d(TAG,model.getPhotoUrl());
                     final Bitmap bitmap = getBitmapFromMemCache(model.getPhotoUrl());
                     if (bitmap != null) {
-                        Log.d(TAG,"isnot null");
+//                        Log.d(TAG,"isnot null");
                         userPhoto.setImageBitmap(bitmap);
                     } else {
-                        Log.d(TAG,"isnull");
+//                        Log.d(TAG,"isnull");
 //                        new GetProfilePhoto(userPhoto).execute(model.getPhotoUrl());
                         Picasso.with(ServiceExchange.this).load(model.getPhotoUrl()).into(userPhoto);
                     }
@@ -347,20 +347,21 @@ public class ServiceExchange extends AppCompatActivity {
             seList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    ServiceExchangeItemNoTime itemDetails = (ServiceExchangeItemNoTime) parent.getAdapter().getItem(position);
+                    FirebaseListAdapterSortFilter<ServiceExchangeItemNoTime> tempAdapter = (FirebaseListAdapterSortFilter<ServiceExchangeItemNoTime>) parent.getAdapter();
+                    ServiceExchangeItemNoTime itemDetails = tempAdapter.getItem(position,true);
                     String itemDescription = itemDetails.getDescription();
                     String itemPrice = itemDetails.getPrice();
                     String itemPhotoUrl = itemDetails.getPhotoUrl();
                     String itemName = itemDetails.getName();
                     String itemDetailedInfo = itemDetails.getDetails();
-                    String itemKey = adapter.getRef(position).getKey();
+                    String itemKey = customAdapter.getRef(position).getKey();
                     String itemBuySell = "";
                     if (itemDetails.isBuy()) {
                         itemBuySell = "Buying for";
                     } else {
                         itemBuySell = "Selling for";
                     }
-                    Log.d(TAG, itemDescription + "\t" + itemPrice + "\t" + itemPhotoUrl);
+//                    Log.d(TAG, itemDescription + "\t" + itemPrice + "\t" + itemPhotoUrl);
                     Intent intent = new Intent(ServiceExchange.this, ServiceExchangeDetails.class);
                     Bundle extras = new Bundle();
                     extras.putString("EXTRA_DESCRIPTION", itemDescription);
