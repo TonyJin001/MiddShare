@@ -12,39 +12,17 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="4"
         android:src="@drawable/logo"
         android:id="@+id/imageView"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
-
-        <EditText android:id="@+id/edit_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/edit_message"
-            android:layout_marginTop="22dp"
-            android:layout_gravity="center_horizontal"/>
-
-        <EditText android:id="@+id/edit_message2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/edit_message2"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center_horizontal"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/enter"
-            android:onClick="logIn"
-            android:id="@+id/button"
-            android:layout_marginTop="16dp"
-            android:layout_gravity="center_horizontal" />
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/login_button"

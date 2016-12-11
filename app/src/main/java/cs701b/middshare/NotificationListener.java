@@ -101,7 +101,7 @@ public class NotificationListener extends Service {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.logo)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(user + " requests on MiddShare")
                 .setAutoCancel(true)
                 .setContentText(description)

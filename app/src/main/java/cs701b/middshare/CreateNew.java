@@ -3,10 +3,13 @@ package cs701b.middshare;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,8 +24,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.facebook.login.widget.ProfilePictureView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
@@ -36,7 +41,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class CreateNew extends AppCompatActivity {
+public class CreateNew extends BaseActivity {
 
     private DatabaseReference mDatabase;
     private String mUserId;
@@ -51,12 +56,15 @@ public class CreateNew extends AppCompatActivity {
     private EditText editValidMinute;
     private TextView minute;
     private long timeLimit = -1;
+    private boolean priceConfirmed = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -98,9 +106,36 @@ public class CreateNew extends AppCompatActivity {
                         InputMethodManager keyboard = (InputMethodManager)
                                 getSystemService(Context.INPUT_METHOD_SERVICE);
                         keyboard.showSoftInput(editPrice,0);
+                    } else {
+                        if (!editPrice.getText().toString().isEmpty()) {
+                            String priceEntered = editPrice.getText().toString().substring(1);
+                            if (!priceEntered.isEmpty()) {
+                                if (Integer.parseInt(priceEntered) > 5000 && !priceConfirmed) {
+                                    new AlertDialog.Builder(CreateNew.this)
+                                            .setTitle("Price too high")
+                                            .setMessage("The price you entered, " + getString(R.string.currency) + priceEntered + ", is higher than" +
+                                                    " what we normally expect in our app. Please confirm that you entered a reasonable price.")
+                                            .setPositiveButton(R.string.confirm_price, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    priceConfirmed = true;
+                                                }
+                                            })
+                                            .setNegativeButton(R.string.change_price, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    editPrice.requestFocus();
+                                                    editPrice.setText("$");
+                                                    editPrice.setSelection(editPrice.getText().length());
+                                                }
+                                            })
+                                            .show();
+                                }
+                            }
+                        }
                     }
                 }
             });
+
+
 
             seSubmit.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -136,7 +171,11 @@ public class CreateNew extends AppCompatActivity {
                         timeLimit = -1;
                     }
 
-
+                    String photoUrl = "";
+                    for (UserInfo profile : mFirebaseUser.getProviderData()) {
+                        String uid = profile.getUid();
+                        photoUrl = "http://graph.facebook.com/" + uid + "/picture?type=large";
+                    }
 
 
                     Log.d(TAG,mFirebaseUser.getPhotoUrl().toString());
@@ -152,9 +191,6 @@ public class CreateNew extends AppCompatActivity {
                     editDescription.setText("");
                     editPrice.setText("");
                     editExtra.setText("");
-
-                    Toast.makeText(CreateNew.this, "buy: " + buy, Toast.LENGTH_SHORT).show();
-
                     finish();
                 }
             });
@@ -251,7 +287,7 @@ public class CreateNew extends AppCompatActivity {
 
 
 
-    private void loadLoginView() {
+    public void loadLoginView() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
