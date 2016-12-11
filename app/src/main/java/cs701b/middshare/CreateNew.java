@@ -61,7 +61,10 @@ public class CreateNew extends BaseActivity {
     private EditText editValidHour;
     private TextView hour;
     private EditText editValidMinute;
+    private EditText editExtra;
+    private EditText editDescription;
     private TextView minute;
+    private Button seSubmit;
     private long timeLimit = -1;
     private boolean priceConfirmed = false;
     private static final int SELECT_PHOTO = 100;
@@ -85,10 +88,11 @@ public class CreateNew extends BaseActivity {
             mDatabase = FirebaseDatabase.getInstance().getReference();
 
 
-            final EditText editDescription = (EditText) findViewById(R.id.edit_message_request);
+            editDescription = (EditText) findViewById(R.id.edit_message_request);
+            editDescription.requestFocus();
             final EditText editPrice = (EditText) findViewById(R.id.edit_message_cost);
-            final EditText editExtra = (EditText) findViewById(R.id.edit_message_extrainfo);
-            final Button seSubmit = (Button) findViewById(R.id.submit_new);
+            editExtra = (EditText) findViewById(R.id.edit_message_extrainfo);
+            seSubmit = (Button) findViewById(R.id.submit_new);
             final RadioButton validFor = (RadioButton) findViewById(R.id.rb_valid_for);
             final RadioButton validUntil = (RadioButton) findViewById(R.id.rb_valid_until);
             final Button addImage = (Button) findViewById(R.id.add_image);
@@ -225,13 +229,18 @@ public class CreateNew extends BaseActivity {
             case SELECT_PHOTO:
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = imageReturnedIntent.getData();
-                    InputStream imageStream = null;
+//                    InputStream imageStream = null;
+//                    try {
+//                        imageStream = getContentResolver().openInputStream(selectedImage);
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                    }
+                    Bitmap imageSelected = null;
                     try {
-                        imageStream = getContentResolver().openInputStream(selectedImage);
+                        imageSelected = decodeUri(selectedImage);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    Bitmap imageSelected = BitmapFactory.decodeStream(imageStream);
 
                     ByteArrayOutputStream bYtE = new ByteArrayOutputStream();
                     imageSelected.compress(Bitmap.CompressFormat.PNG, 100, bYtE);
@@ -240,6 +249,37 @@ public class CreateNew extends BaseActivity {
                     encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
                 }
         }
+
+    }
+
+    private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
+
+        // Decode image size
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o);
+
+        // The new size we want to scale to
+        final int REQUIRED_SIZE = 160;
+
+        // Find the correct scale value. It should be the power of 2.
+        double width_tmp = o.outWidth, height_tmp = o.outHeight;
+        double scale = 1;
+        while (true) {
+            if (width_tmp / 1.1 < REQUIRED_SIZE
+                    || height_tmp / 1.1 < REQUIRED_SIZE) {
+                break;
+            }
+            width_tmp /= 1.1;
+            height_tmp /= 1.1;
+            scale *= 1.1;
+        }
+
+        // Decode with inSampleSize
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = (int) scale;
+        return BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o2);
+
     }
 
     public void onBuySellRadioButtonClicked(View view) {

@@ -195,6 +195,7 @@ public class ServiceExchangeDetails extends BaseActivity {
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             optionalImage.setImageBitmap(decodedByte);
             optionalImage.setVisibility(View.VISIBLE);
+            Log.d(TAG,imageString);
         }
         itemKey = extras.getString("EXTRA_ITEM_KEY");
         new GetProfilePhoto(userPhoto).execute(extras.getString("EXTRA_PHOTOURL"));
@@ -224,4 +225,6 @@ public class ServiceExchangeDetails extends BaseActivity {
     public Bitmap getBitmapFromMemCache(String key) {
         return mMemoryCache.get(key);
     }
+
+
 }

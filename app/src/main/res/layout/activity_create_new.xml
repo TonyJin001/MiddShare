@@ -5,6 +5,8 @@
     android:id="@+id/activity_create_new"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
 
     tools:context="cs701b.middshare.CreateNew">
 
