@@ -192,58 +192,6 @@ public class ServiceExchange extends AppCompatActivity {
 
             final ListView seList = (ListView) findViewById(R.id.service_list);
 
-            final FirebaseListAdapter<ServiceExchangeItemNoTime> adapter = new FirebaseListAdapter<ServiceExchangeItemNoTime>(
-                    this,
-                    ServiceExchangeItemNoTime.class,
-                    R.layout.list_item_service_exchange,
-                    mDatabase.child("service_exchange_items")
-            ) {
-                @Override
-                protected void populateView(View v, ServiceExchangeItemNoTime model, int position) {
-                    DatabaseReference ref = this.getRef(position);
-                    if (ref != null){
-                        if (model.getTimeLimit() < Calendar.getInstance().getTimeInMillis() && model.getTimeLimit() != -1) {
-                            Log.v(TAG, "Time limit passed");
-                            ref.removeValue();
-                        }
-                    }
-
-                    ImageView userPhoto = (ImageView) v.findViewById(R.id.user_photo);
-                    TextView description = (TextView) v.findViewById(R.id.description);
-                    TextView price = (TextView) v.findViewById(R.id.cost);
-                    TextView userName = (TextView) v.findViewById(R.id.user_name);
-                    TextView buySell = (TextView) v.findViewById(R.id.buy_sell);
-                    description.setText(model.getDescription());
-                    userName.setText(model.getName());
-                    if (model.isBuy()) {
-                        buySell.setText("Buying for");
-                        buySell.setTextColor(Color.parseColor("#E91E63"));
-                    } else {
-                        buySell.setText("Selling for");
-                        buySell.setTextColor(Color.parseColor("#4CAF50"));
-                    }
-
-//                    Log.d(TAG, model.getDescription() + "@" + model.getPrice());
-                    price.setText(model.getPrice());
-
-                    Log.d(TAG,model.getPhotoUrl());
-                    final Bitmap bitmap = getBitmapFromMemCache(model.getPhotoUrl());
-                    if (bitmap != null) {
-//                        Log.d(TAG,"isnot null");
-                        userPhoto.setImageBitmap(bitmap);
-                    } else {
-//                        Log.d(TAG,"isnull");
-//                        new GetProfilePhoto(userPhoto).execute(model.getPhotoUrl());
-                        Picasso.with(ServiceExchange.this).load(model.getPhotoUrl()).into(userPhoto);
-                    }
-//                    userPhoto.setImageURI(Uri.parse(model.getPhotoUrl()));
-
-//                    // Photo profiles swap quickly, problem maybe with async task and global variable currentBitmap....
-//                    Log.d(TAG,"Current bitmap: " + currentBitmap);
-//                    userPhoto.setImageBitmap(currentBitmap);
-                }
-            };
-
             final FirebaseListAdapterSortFilter<ServiceExchangeItemNoTime> customAdapter = new FirebaseListAdapterSortFilter<ServiceExchangeItemNoTime>(
                     this,
                     ServiceExchangeItemNoTime.class,
@@ -361,6 +309,7 @@ public class ServiceExchange extends AppCompatActivity {
                     String itemDetailedInfo = itemDetails.getDetails();
                     String itemKey = customAdapter.getRef(position).getKey();
                     String itemBuySell = "";
+                    String itemEncodedImage = itemDetails.getEncodedImage();
                     if (itemDetails.isBuy()) {
                         itemBuySell = "Buying for";
                     } else {
@@ -376,6 +325,7 @@ public class ServiceExchange extends AppCompatActivity {
                     extras.putString("EXTRA_DETAILS", itemDetailedInfo);
                     extras.putString("EXTRA_ITEM_KEY", itemKey);
                     extras.putString("EXTRA_BUY_SELL", itemBuySell);
+                    extras.putString("EXTRA_ENCODED_IMAGE",itemEncodedImage);
 
                     Log.d(TAG, itemKey);
 

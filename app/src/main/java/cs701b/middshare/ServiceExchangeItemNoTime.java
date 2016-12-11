@@ -20,13 +20,14 @@ public class ServiceExchangeItemNoTime {
     private long time;
     private boolean buy;
     private long timeLimit;
+    private String encodedImage;
 
 
     public ServiceExchangeItemNoTime() {
 
     }
 
-    public ServiceExchangeItemNoTime(String description, String price, String photoUrl, String name, String details, long time, boolean buy, long timeLimit) {
+    public ServiceExchangeItemNoTime(String description, String price, String photoUrl, String name, String details, long time, boolean buy, long timeLimit, String encodedImage) {
         this.description = description;
         this.price = price;
         this.name = name;
@@ -34,6 +35,7 @@ public class ServiceExchangeItemNoTime {
         this.time = time;
         this.buy = buy;
         this.timeLimit = timeLimit;
+        this.encodedImage = encodedImage;
         if (photoUrl.equals(null)) {
             this.photoUrl = "";
             Log.d("SEItem","url is null");
@@ -43,16 +45,6 @@ public class ServiceExchangeItemNoTime {
         }
     }
 
-//    public Map<String,Object> toMap() {
-//        HashMap<String, Object> result = new HashMap<>();
-//        result.put("description", description);
-//        result.put("price",price);
-//        result.put("photoUrl",photoUrl);
-//        result.put("name",name);
-//        result.put("details",details);
-//        result.put("time",time);
-//        return result;
-//    }
 
     public String getDescription() {
         return description;
@@ -116,6 +108,14 @@ public class ServiceExchangeItemNoTime {
 
     public void setTimeLimit(long timeLimit) {
         this.timeLimit = timeLimit;
+    }
+
+    public String getEncodedImage() {
+        return encodedImage;
+    }
+
+    public void setEncodedImage(String encodedImage) {
+        this.encodedImage = encodedImage;
     }
 
     @Override

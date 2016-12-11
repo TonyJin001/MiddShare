@@ -5,11 +5,15 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +38,9 @@ import com.google.firebase.database.ServerValue;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -57,6 +64,8 @@ public class CreateNew extends BaseActivity {
     private TextView minute;
     private long timeLimit = -1;
     private boolean priceConfirmed = false;
+    private static final int SELECT_PHOTO = 100;
+    private String encodedImage = "";
 
 
     @Override
@@ -82,6 +91,7 @@ public class CreateNew extends BaseActivity {
             final Button seSubmit = (Button) findViewById(R.id.submit_new);
             final RadioButton validFor = (RadioButton) findViewById(R.id.rb_valid_for);
             final RadioButton validUntil = (RadioButton) findViewById(R.id.rb_valid_until);
+            final Button addImage = (Button) findViewById(R.id.add_image);
 
             untilTime = (TextView) findViewById(R.id.until_time);
             llValidTime = (LinearLayout) findViewById(R.id.ll_valid_time);
@@ -180,7 +190,7 @@ public class CreateNew extends BaseActivity {
 
                     Log.d(TAG,mFirebaseUser.getPhotoUrl().toString());
                     ServiceExchangeItem newItem = new ServiceExchangeItem(editDescription.getText().toString(), cost,
-                            mFirebaseUser.getPhotoUrl().toString(),mFirebaseUser.getDisplayName(),editExtra.getText().toString(),ServerValue.TIMESTAMP, buy, timeLimit);
+                            mFirebaseUser.getPhotoUrl().toString(),mFirebaseUser.getDisplayName(),editExtra.getText().toString(),ServerValue.TIMESTAMP, buy, timeLimit, encodedImage);
                     Map<String, Object> newItemValues = newItem.toMap();
 
                     Map<String, Object> childUpdates = new HashMap<>();
@@ -195,10 +205,41 @@ public class CreateNew extends BaseActivity {
                 }
             });
 
-
-
+            addImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                    photoPickerIntent.setType("image/*");
+                    startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+                }
+            });
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch(requestCode) {
+            case SELECT_PHOTO:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    InputStream imageStream = null;
+                    try {
+                        imageStream = getContentResolver().openInputStream(selectedImage);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    Bitmap imageSelected = BitmapFactory.decodeStream(imageStream);
+
+                    ByteArrayOutputStream bYtE = new ByteArrayOutputStream();
+                    imageSelected.compress(Bitmap.CompressFormat.PNG, 100, bYtE);
+                    imageSelected.recycle();
+                    byte[] byteArray = bYtE.toByteArray();
+                    encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                }
+        }
     }
 
     public void onBuySellRadioButtonClicked(View view) {

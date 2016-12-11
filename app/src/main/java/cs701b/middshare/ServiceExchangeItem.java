@@ -19,12 +19,13 @@ public class ServiceExchangeItem {
     private Map<String,String> time;
     private long timeLimit;
     private boolean buy;
+    private String encodedImage;
 
     public ServiceExchangeItem() {
 
     }
 
-    public ServiceExchangeItem(String description, String price, String photoUrl, String name, String details, Map<String,String> time, boolean buy, long timeLimit) {
+    public ServiceExchangeItem(String description, String price, String photoUrl, String name, String details, Map<String,String> time, boolean buy, long timeLimit, String encodedImage) {
         this.description = description;
         this.price = price;
         this.name = name;
@@ -32,6 +33,7 @@ public class ServiceExchangeItem {
         this.time = time;
         this.buy = buy;
         this.timeLimit = timeLimit;
+        this.encodedImage = encodedImage;
         if (photoUrl.equals(null)) {
             this.photoUrl = "";
             Log.d("SEItem","url is null");
@@ -51,6 +53,7 @@ public class ServiceExchangeItem {
         result.put("time",time);
         result.put("buy",buy);
         result.put("timeLimit",timeLimit);
+        result.put("encodedImage",encodedImage);
         return result;
     }
 
@@ -116,6 +119,14 @@ public class ServiceExchangeItem {
 
     public void setTimeLimit(long timeLimit) {
         this.timeLimit = timeLimit;
+    }
+
+    public String getEncodedImage() {
+        return encodedImage;
+    }
+
+    public void setEncodedImage(String encodedImage) {
+        this.encodedImage = encodedImage;
     }
 }
 
