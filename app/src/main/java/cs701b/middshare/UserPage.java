@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.ContextMenu;
@@ -29,7 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
-public class UserPage extends AppCompatActivity {
+public class UserPage extends BaseActivity {
     private final String TAG = "User Page";
     private DatabaseReference mDatabase;
     private String mUserId;
@@ -46,6 +47,8 @@ public class UserPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_page_scrolling);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory()/1024);
         final int cacheSize = maxMemory/8;
         mMemoryCache = new LruCache<String,Bitmap> (cacheSize) {
@@ -198,7 +201,7 @@ public class UserPage extends AppCompatActivity {
 
 
 
-    private void loadLoginView() {
+    public void loadLoginView() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

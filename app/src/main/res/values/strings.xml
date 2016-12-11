@@ -23,8 +23,12 @@
     <string name="minute">Minute(s)</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="action_settings">Settings</string>
+<!--<<<<<<< HEAD-->
 
-    <string name="delete_item">Delete</string>
-    <string name="resolve_item">Resolve</string>
-    <string name="cancel_delete">Cancel</string>
+    <!--<string name="delete_item">Delete</string>-->
+    <!--<string name="resolve_item">Resolve</string>-->
+    <!--<string name="cancel_delete">Cancel</string>-->
+<!--=======-->
+    <string name="title_activity_base">BaseActivity</string>
+<!--&gt;>>>>>> 1ff018dd76d165cdf76fa05fdd7ede024db86b24-->
 </resources>

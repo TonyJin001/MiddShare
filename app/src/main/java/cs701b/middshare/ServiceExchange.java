@@ -11,8 +11,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.LruCache;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -43,6 +47,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -80,6 +85,8 @@ public class ServiceExchange extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_exchange);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         // hasn't verified isRegistered... yet
 
 
@@ -159,13 +166,13 @@ public class ServiceExchange extends AppCompatActivity {
                 }
             }
 
-            Button bLogOut = (Button) findViewById(R.id.logout_button);
-            bLogOut.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    logOut(v);
-                }
-            });
+//            Button bLogOut = (Button) findViewById(R.id.logout_button);
+//            bLogOut.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    logOut(v);
+//                }
+//            });
 
             final ListView seList = (ListView) findViewById(R.id.service_list);
 
@@ -200,11 +207,15 @@ public class ServiceExchange extends AppCompatActivity {
                     Log.d(TAG, model.getDescription() + "@" + model.getPrice());
                     price.setText(model.getPrice());
 
+                    Log.d(TAG,model.getPhotoUrl());
                     final Bitmap bitmap = getBitmapFromMemCache(model.getPhotoUrl());
                     if (bitmap != null) {
+                        Log.d(TAG,"isnot null");
                         userPhoto.setImageBitmap(bitmap);
                     } else {
-                        new GetProfilePhoto(userPhoto).execute(model.getPhotoUrl());
+                        Log.d(TAG,"isnull");
+//                        new GetProfilePhoto(userPhoto).execute(model.getPhotoUrl());
+                        Picasso.with(ServiceExchange.this).load(model.getPhotoUrl()).into(userPhoto);
                     }
 //                    userPhoto.setImageURI(Uri.parse(model.getPhotoUrl()));
 
@@ -273,6 +284,26 @@ public class ServiceExchange extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.global_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_log_out:
+                logOut();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void updateProfile(String name, String email, Uri uri) {
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(name)
@@ -299,7 +330,7 @@ public class ServiceExchange extends AppCompatActivity {
     }
 
 
-    private void logOut(View view) {
+    private void logOut() {
         mFirebaseAuth.signOut();
         FacebookSdk.sdkInitialize(getApplicationContext());
         LoginManager.getInstance().logOut();
@@ -375,6 +406,7 @@ public class ServiceExchange extends AppCompatActivity {
                 Bitmap bitmap = null;
                 try {
                     URL url = new URL(urlStr[0]);
+                    Log.d(TAG,urlStr[0]);
                     bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                     addBitmapToMemoryCache(urlStr[0], bitmap);
                 } catch (NullPointerException e) {
