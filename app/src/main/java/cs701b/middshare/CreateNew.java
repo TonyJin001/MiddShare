@@ -3,8 +3,10 @@ package cs701b.middshare;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -54,6 +56,7 @@ public class CreateNew extends BaseActivity {
     private EditText editValidMinute;
     private TextView minute;
     private long timeLimit = -1;
+    private boolean priceConfirmed = false;
 
 
     @Override
@@ -103,9 +106,36 @@ public class CreateNew extends BaseActivity {
                         InputMethodManager keyboard = (InputMethodManager)
                                 getSystemService(Context.INPUT_METHOD_SERVICE);
                         keyboard.showSoftInput(editPrice,0);
+                    } else {
+                        if (!editPrice.getText().toString().isEmpty()) {
+                            String priceEntered = editPrice.getText().toString().substring(1);
+                            if (!priceEntered.isEmpty()) {
+                                if (Integer.parseInt(priceEntered) > 5000 && !priceConfirmed) {
+                                    new AlertDialog.Builder(CreateNew.this)
+                                            .setTitle("Price too high")
+                                            .setMessage("The price you entered, " + getString(R.string.currency) + priceEntered + ", is higher than" +
+                                                    " what we normally expect in our app. Please confirm that you entered a reasonable price.")
+                                            .setPositiveButton(R.string.confirm_price, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    priceConfirmed = true;
+                                                }
+                                            })
+                                            .setNegativeButton(R.string.change_price, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    editPrice.requestFocus();
+                                                    editPrice.setText("$");
+                                                    editPrice.setSelection(editPrice.getText().length());
+                                                }
+                                            })
+                                            .show();
+                                }
+                            }
+                        }
                     }
                 }
             });
+
+
 
             seSubmit.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {

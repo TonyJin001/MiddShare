@@ -34,4 +34,6 @@
     </string-array>
     <string name="action_settings">Settings</string>
     <string name="title_activity_base">BaseActivity</string>
+    <string name="change_price">Change Price</string>
+    <string name="confirm_price">Confirm Price</string>
 </resources>
