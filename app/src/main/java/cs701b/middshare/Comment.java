@@ -2,6 +2,7 @@ package cs701b.middshare;
 
 import android.util.Log;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ public class Comment {
     private String name;
     private String comment;
     private String photoUrl;
+    private long time;
 
     public Comment() {
 
@@ -60,4 +62,8 @@ public class Comment {
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }
+
+    public void setTime() { this.time = Calendar.getInstance().getTimeInMillis(); }
+
+    public long getTime() { return this.time; }
 }
