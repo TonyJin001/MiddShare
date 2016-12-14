@@ -5,6 +5,8 @@
     android:id="@+id/activity_create_new"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
 
     tools:context="cs701b.middshare.CreateNew">
 
@@ -135,6 +137,16 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="62dp" />
+
+    <Button
+        android:id="@+id/add_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Image"
+        android:layout_above="@id/submit_new"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="5dp"/>
 
     <LinearLayout
         android:id="@+id/ll_valid_time"

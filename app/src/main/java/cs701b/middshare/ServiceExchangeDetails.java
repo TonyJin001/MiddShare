@@ -3,14 +3,18 @@ package cs701b.middshare;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Base64;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -42,6 +46,7 @@ public class ServiceExchangeDetails extends BaseActivity {
     private TextView name;
     private TextView details;
     private TextView buySellDetails;
+    private ImageView optionalImage;
     private String itemKey;
     private ListView comments;
     private EditText writeComment;
@@ -163,6 +168,7 @@ public class ServiceExchangeDetails extends BaseActivity {
         name = (TextView) itemInfoRL.findViewById(R.id.name_details);
         details = (TextView) itemInfoRL.findViewById(R.id.details_details);
         buySellDetails = (TextView) itemInfoRL.findViewById(R.id.buy_sell);
+        optionalImage = (ImageView) outsideLL.findViewById(R.id.optional_image);
 
 
         comments = (ListView) outsideLL.findViewById(R.id.comments);
@@ -176,14 +182,21 @@ public class ServiceExchangeDetails extends BaseActivity {
         price.setText(extras.getString("EXTRA_PRICE"));
         name.setText(extras.getString("EXTRA_NAME"));
         details.setText(extras.getString("EXTRA_DETAILS"));
+        details.setMovementMethod(new ScrollingMovementMethod());
         buySellDetails.setText(extras.getString("EXTRA_BUY_SELL"));
         if (buySellDetails.getText().toString().equals("Buying for")){
             buySellDetails.setTextColor(Color.parseColor("#E91E63"));
         } else {
             buySellDetails.setTextColor(Color.parseColor("#4CAF50"));
         }
-        //this needs to be fixed (itemKey)
-
+        String imageString = extras.getString("EXTRA_ENCODED_IMAGE");
+        if (!imageString.isEmpty()) {
+            byte[] decodedString = Base64.decode(imageString, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            optionalImage.setImageBitmap(decodedByte);
+            optionalImage.setVisibility(View.VISIBLE);
+            Log.d(TAG,imageString);
+        }
         itemKey = extras.getString("EXTRA_ITEM_KEY");
         new GetProfilePhoto(userPhoto).execute(extras.getString("EXTRA_PHOTOURL"));
 
@@ -212,4 +225,6 @@ public class ServiceExchangeDetails extends BaseActivity {
     public Bitmap getBitmapFromMemCache(String key) {
         return mMemoryCache.get(key);
     }
+
+
 }

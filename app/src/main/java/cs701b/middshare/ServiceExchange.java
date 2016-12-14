@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,6 +78,7 @@ public class ServiceExchange extends AppCompatActivity {
 
     private ProfilePictureView profilePictureView;
     private TextView userNameSelf;
+    private Spinner sort;
     private DatabaseReference mDatabase;
     private String mUserId;
     private FirebaseAuth mFirebaseAuth;
@@ -138,7 +140,7 @@ public class ServiceExchange extends AppCompatActivity {
                 profilePictureView = (ProfilePictureView) findViewById(R.id.profile_pic);
                 profilePictureView.setProfileId(uid);
                 photoUrl = "http://graph.facebook.com/" + uid + "/picture?width=800&height=600";
-                Log.d(TAG,photoUrl);
+//                Log.d(TAG,photoUrl);
                 email = profile.getEmail();
                 name = profile.getDisplayName();
             }
@@ -156,6 +158,10 @@ public class ServiceExchange extends AppCompatActivity {
             userNameSelf = (TextView) findViewById(R.id.se_user_name);
             userNameSelf.setText(name);
             userNameSelf.setOnClickListener(goToUserPage);
+
+
+
+            sort = (Spinner) findViewById(R.id.select_sort);
 
             final String finalPhotoUrl = photoUrl;
 
@@ -186,7 +192,7 @@ public class ServiceExchange extends AppCompatActivity {
 
             final ListView seList = (ListView) findViewById(R.id.service_list);
 
-            final FirebaseListAdapter<ServiceExchangeItemNoTime> adapter = new FirebaseListAdapter<ServiceExchangeItemNoTime>(
+            final FirebaseListAdapterSortFilter<ServiceExchangeItemNoTime> customAdapter = new FirebaseListAdapterSortFilter<ServiceExchangeItemNoTime>(
                     this,
                     ServiceExchangeItemNoTime.class,
                     R.layout.list_item_service_exchange,
@@ -195,9 +201,11 @@ public class ServiceExchange extends AppCompatActivity {
                 @Override
                 protected void populateView(View v, ServiceExchangeItemNoTime model, int position) {
                     DatabaseReference ref = this.getRef(position);
-                    if (model.getTimeLimit() < Calendar.getInstance().getTimeInMillis() && model.getTimeLimit() != -1) {
-                        Log.v(TAG, "Time limit passed");
-                        ref.removeValue();
+                    if (ref != null){
+                        if (model.getTimeLimit() < Calendar.getInstance().getTimeInMillis() && model.getTimeLimit() != -1) {
+                            Log.v(TAG, "Time limit passed");
+                            ref.removeValue();
+                        }
                     }
                     ImageView userPhoto = (ImageView) v.findViewById(R.id.user_photo);
                     TextView description = (TextView) v.findViewById(R.id.description);
@@ -214,16 +222,16 @@ public class ServiceExchange extends AppCompatActivity {
                         buySell.setTextColor(Color.parseColor("#4CAF50"));
                     }
 
-                    Log.d(TAG, model.getDescription() + "@" + model.getPrice());
+//                    Log.d(TAG, model.getDescription() + "@" + model.getPrice());
                     price.setText(model.getPrice());
 
-                    Log.d(TAG,model.getPhotoUrl());
+//                    Log.d(TAG,model.getPhotoUrl());
                     final Bitmap bitmap = getBitmapFromMemCache(model.getPhotoUrl());
                     if (bitmap != null) {
-                        Log.d(TAG,"isnot null");
+//                        Log.d(TAG,"isnot null");
                         userPhoto.setImageBitmap(bitmap);
                     } else {
-                        Log.d(TAG,"isnull");
+//                        Log.d(TAG,"isnull");
 //                        new GetProfilePhoto(userPhoto).execute(model.getPhotoUrl());
                         Picasso.with(ServiceExchange.this).load(model.getPhotoUrl()).into(userPhoto);
                     }
@@ -234,25 +242,80 @@ public class ServiceExchange extends AppCompatActivity {
 //                    userPhoto.setImageBitmap(currentBitmap);
                 }
             };
-            seList.setAdapter(adapter);
+
+//            sort.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    seList.setAdapter(reverseAdapter);
+//                }
+//            });
+
+            seList.setAdapter(customAdapter);
+
+            sort.setPrompt(getString(R.string.sort));
+            sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    String itemSelected = adapterView.getItemAtPosition(i).toString();
+                    switch (itemSelected){
+                        case("Newest First"): {
+                            customAdapter.setSortingMethod("NF");
+                            seList.setAdapter(customAdapter);
+                            break;
+                        }
+                        case("Oldest First"): {
+                            customAdapter.setSortingMethod("OF");
+                            seList.setAdapter(customAdapter);
+                            break;
+                        }
+                        case("Username A-Z"): {
+                            customAdapter.setSortingMethod("AZ");
+                            seList.setAdapter(customAdapter);
+                            break;
+                        }
+                        case("Username Z-A"): {
+                            customAdapter.setSortingMethod("ZA");
+                            seList.setAdapter(customAdapter);
+                            break;
+                        }
+                        case("Buy First"): {
+                            customAdapter.setSortingMethod("BF");
+                            seList.setAdapter(customAdapter);
+                            break;
+                        }
+                        case("Sell First"): {
+                            customAdapter.setSortingMethod("SF");
+                            seList.setAdapter(customAdapter);
+                            break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
 
             seList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    ServiceExchangeItemNoTime itemDetails = (ServiceExchangeItemNoTime) parent.getAdapter().getItem(position);
+                    FirebaseListAdapterSortFilter<ServiceExchangeItemNoTime> tempAdapter = (FirebaseListAdapterSortFilter<ServiceExchangeItemNoTime>) parent.getAdapter();
+                    ServiceExchangeItemNoTime itemDetails = tempAdapter.getItem(position,true);
                     String itemDescription = itemDetails.getDescription();
                     String itemPrice = itemDetails.getPrice();
                     String itemPhotoUrl = itemDetails.getPhotoUrl();
                     String itemName = itemDetails.getName();
                     String itemDetailedInfo = itemDetails.getDetails();
-                    String itemKey = adapter.getRef(position).getKey();
+                    String itemKey = customAdapter.getRef(position).getKey();
                     String itemBuySell = "";
+                    String itemEncodedImage = itemDetails.getEncodedImage();
                     if (itemDetails.isBuy()) {
                         itemBuySell = "Buying for";
                     } else {
                         itemBuySell = "Selling for";
                     }
-                    Log.d(TAG, itemDescription + "\t" + itemPrice + "\t" + itemPhotoUrl);
+//                    Log.d(TAG, itemDescription + "\t" + itemPrice + "\t" + itemPhotoUrl);
                     Intent intent = new Intent(ServiceExchange.this, ServiceExchangeDetails.class);
                     Bundle extras = new Bundle();
                     extras.putString("EXTRA_DESCRIPTION", itemDescription);
@@ -262,6 +325,7 @@ public class ServiceExchange extends AppCompatActivity {
                     extras.putString("EXTRA_DETAILS", itemDetailedInfo);
                     extras.putString("EXTRA_ITEM_KEY", itemKey);
                     extras.putString("EXTRA_BUY_SELL", itemBuySell);
+                    extras.putString("EXTRA_ENCODED_IMAGE",itemEncodedImage);
 
                     Log.d(TAG, itemKey);
 
